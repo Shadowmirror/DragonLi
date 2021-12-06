@@ -160,10 +160,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if( currentListLayoutMode == MODE_LINEAR){
+        if (currentListLayoutMode == MODE_LINEAR) {
             MenuItem item = menu.findItem(R.id.menu_linear);
             item.setChecked(true);
-        }else{
+        } else {
             menu.findItem(R.id.menu_grid).setChecked(true);
         }
         return super.onPrepareOptionsMenu(menu);

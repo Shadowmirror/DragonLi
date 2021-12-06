@@ -47,8 +47,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="add_text"
-            android:text="添加" />
+            android:onClick="save_text"
+            android:text="保存" />
 
 
 
