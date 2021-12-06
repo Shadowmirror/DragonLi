@@ -6,12 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="5ENDU19B04007490" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\EDY\.android\avd\Root_Nexus_5_API_30.avd" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2021-12-06T09:47:08.865889Z" />
+    <timeTargetWasSelectedWithDropDown value="2021-12-06T10:25:50.349720300Z" />
   </component>
 </project>
