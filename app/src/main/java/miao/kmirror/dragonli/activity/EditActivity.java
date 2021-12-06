@@ -1,10 +1,13 @@
 package miao.kmirror.dragonli.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -36,11 +39,43 @@ public class EditActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);
 
+        etContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
 
         initData();
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home){
+            ToastUtils.toastShort(this, "miaor");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 实体返回按钮的监听
+     * */
+    @Override
+    public void onBackPressed() {
+        ToastUtils.toastShort(this, "返回键被点击");
+        super.onBackPressed();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
