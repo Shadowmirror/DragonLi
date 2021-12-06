@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,7 +33,23 @@ public class AddActivity extends AppCompatActivity {
         etContent = findViewById(R.id.et_content);
     }
 
-    public void add_text(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_save, menu);
+        MenuItem item = menu.findItem(R.id.menu_save);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                add_text();
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+
+    public void add_text() {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
         if(TextUtils.isEmpty(title)){

@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import org.litepal.LitePal;
 
@@ -32,22 +36,40 @@ public class EditActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);
 
+
         initData();
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_save, menu);
+        MenuItem item = menu.findItem(R.id.menu_save);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                save_text();
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     private void initData() {
         Intent intent = getIntent();
         text = (Text) intent.getSerializableExtra("text");
-        if(text != null){
+        if (text != null) {
             etTitle.setText(text.getTitle());
             etContent.setText(text.getContent());
         }
     }
 
-    public void save_text(View view) {
+    public void save_text() {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
-        if(TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             ToastUtils.toastShort(this, "标题不能为空！");
             return;
         }
@@ -56,10 +78,10 @@ public class EditActivity extends AppCompatActivity {
         text.setContent(content);
         text.setCreatedTime(DateUtils.getCurrentTimeFormat());
         int row = text.updateAll("id = ?", text.getId().toString());
-        if(row != -1){
+        if (row != -1) {
             ToastUtils.toastShort(this, "修改成功！");
             this.finish();
-        }else{
+        } else {
             ToastUtils.toastShort(this, "修改失败！");
         }
     }

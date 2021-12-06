@@ -40,15 +40,12 @@
             android:id="@+id/et_content"
             style="@style/MyEditStyle"
             android:layout_width="match_parent"
-            android:gravity="left"
-            android:layout_height="500dp"
-            android:layout_marginTop="5dp" />
-
-        <Button
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="add_text"
-            android:text="保存" />
+            android:layout_marginTop="5dp"
+            android:minLines="30"
+            android:gravity="left" />
+
+
 
 
 
