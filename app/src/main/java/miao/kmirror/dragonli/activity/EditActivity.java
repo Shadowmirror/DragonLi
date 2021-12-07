@@ -26,6 +26,7 @@ import java.util.Date;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.bean.Text;
+import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
@@ -140,7 +141,8 @@ public class EditActivity extends AppCompatActivity {
         text = (Text) intent.getSerializableExtra("text");
         if (text != null) {
             etTitle.setText(text.getTitle());
-            etContent.setText(text.getContent());
+            String temp = AESEncryptUtils.decrypt(text.getContent(), AESEncryptUtils.TEST_PASS);
+            etContent.setText(temp);
         }
     }
 
@@ -156,7 +158,9 @@ public class EditActivity extends AppCompatActivity {
         }
 
         text.setTitle(title);
-        text.setContent(content);
+        String temp = AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS);
+        // 加密
+        text.setContent(temp);
         text.setCreatedTime(DateUtils.getCurrentTimeFormat());
         int row = text.updateAll("id = ?", text.getId().toString());
         if (row != -1) {

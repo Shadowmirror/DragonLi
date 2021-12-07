@@ -23,6 +23,7 @@ import java.util.List;
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.EditActivity;
 import miao.kmirror.dragonli.bean.Text;
+import miao.kmirror.dragonli.utils.AESEncryptUtils;
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -78,6 +79,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void bindMyViewHolder(MyViewHolder holder, int position) {
         Text text = mTextList.get(position);
         holder.mTvTitle.setText(text.getTitle());
+        // 解密
         holder.mTvContent.setText(text.getContent());
         holder.mTvTime.setText(text.getCreatedTime());
         // 设置单击响应事件

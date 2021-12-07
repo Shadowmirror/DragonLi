@@ -20,6 +20,7 @@ import java.util.Date;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.bean.Text;
+import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
@@ -135,7 +136,9 @@ public class AddActivity extends AppCompatActivity {
         Text text = new Text();
 
         text.setTitle(title);
-        text.setContent(content);
+        // 加密
+        String temp = AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS);
+        text.setContent(temp);
         text.setCreatedTime(DateUtils.getCurrentTimeFormat());
         boolean isSave = text.save();
         if(isSave){
