@@ -15,7 +15,7 @@ import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText EtPassword;
     private Button BtVerifyPassword;
@@ -33,28 +33,38 @@ public class LoginActivity extends AppCompatActivity {
         actionBar.hide();
         setContentView(R.layout.activity_login);
 
+        // 密码登录
         EtPassword = findViewById(R.id.et_password);
         BtVerifyPassword = findViewById(R.id.bt_verify_password);
-        BtVerifyPassword.setOnClickListener(v -> {
-            verifyPassword();
-        });
+
     }
 
-    public void verifyPassword(){
+    public void verifyPassword() {
         String password = EtPassword.getText().toString();
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             ToastUtils.toastShort(this, "密码不能为空");
             return;
-        }else{
+        } else {
             String tempPassword = MD5Utils.getMD5Code(password);
             String verifyPassword = MD5Utils.getMD5Code(AESEncryptUtils.TEST_PASS);
-            if(verifyPassword.equals(tempPassword)){
+            if (verifyPassword.equals(tempPassword)) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
-            }else{
+            } else {
                 ToastUtils.toastShort(this, "密码错误");
                 return;
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_verify_password:
+                verifyPassword();
+                break;
+            default:
+                break;
         }
     }
 }

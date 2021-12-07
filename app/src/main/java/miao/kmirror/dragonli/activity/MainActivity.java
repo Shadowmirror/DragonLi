@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import adapter.MyAdapter;
+import miao.kmirror.dragonli.adapter.MyAdapter;
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.bean.Text;
 import miao.kmirror.dragonli.utils.SpfUtils;

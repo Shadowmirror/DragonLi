@@ -1,14 +1,11 @@
-package adapter;
+package miao.kmirror.dragonli.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,14 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import org.litepal.LitePal;
-import org.litepal.crud.LitePalSupport;
 
 import java.util.List;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.EditActivity;
 import miao.kmirror.dragonli.bean.Text;
-import miao.kmirror.dragonli.utils.AESEncryptUtils;
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
