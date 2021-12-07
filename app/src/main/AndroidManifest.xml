@@ -10,23 +10,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DragonLi">
-        <activity android:name=".activity.EditActivity"
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EditActivity"
             android:label="编辑记事"
-            android:parentActivityName=".activity.MainActivity"
-            ></activity>
+            android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.AddActivity"
             android:label="添加记事"
             android:parentActivityName=".activity.MainActivity" />
-        <activity android:name=".activity.MainActivity"
-            android:label="记事本列表">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="DragonLi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
