@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DragonLi">
         <activity
+            android:name=".activity.SecretActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
@@ -23,6 +26,9 @@
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.LoginActivity"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity
+            android:name=".activity.FingerLoginActivity"
             android:label="DragonLi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

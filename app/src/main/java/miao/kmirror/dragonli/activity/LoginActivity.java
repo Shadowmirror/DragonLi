@@ -15,7 +15,7 @@ import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity{
 
     private EditText EtPassword;
     private Button BtVerifyPassword;
@@ -23,20 +23,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
         setContentView(R.layout.activity_login);
 
         // 密码登录
         EtPassword = findViewById(R.id.et_password);
         BtVerifyPassword = findViewById(R.id.bt_verify_password);
 
+        BtVerifyPassword.setOnClickListener(v -> {
+            verifyPassword();
+        });
     }
 
     public void verifyPassword() {
@@ -54,17 +49,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ToastUtils.toastShort(this, "密码错误");
                 return;
             }
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_verify_password:
-                verifyPassword();
-                break;
-            default:
-                break;
         }
     }
 }
