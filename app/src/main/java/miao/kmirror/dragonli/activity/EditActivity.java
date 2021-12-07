@@ -1,13 +1,17 @@
 package miao.kmirror.dragonli.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -27,9 +31,12 @@ import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class EditActivity extends AppCompatActivity {
 
+    public static final String TAG = "EditActivity";
     private Text text;
     private EditText etTitle;
     private EditText etContent;
+    private boolean isChange = false;
+    private int skipOne = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +46,21 @@ public class EditActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);
 
+        /**
+         * 文本改变监听
+         * */
         etContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+               if(skipOne++ != 1 && count > 0){
+                   isChange = true;
+               }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -58,23 +70,54 @@ public class EditActivity extends AppCompatActivity {
         initData();
     }
 
+    /**
+     * 返回按钮的是否保存事件
+     * */
+    public void changeSave() {
+        if (isChange) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditActivity.this);
+            alertDialog.setTitle("警告：");
+            alertDialog.setMessage("内容已更改是否保存？");
+            alertDialog.setCancelable(true);
+            alertDialog.setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    save_text();
+                }
+            });
+            alertDialog.setNegativeButton("不保存", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    EditActivity.this.finish();
+                }
+            });
+            alertDialog.show();
+        }
+    }
 
+    /**
+     * 监听左上角返回事件
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home){
-            ToastUtils.toastShort(this, "miaor");
+        if (item.getItemId() == android.R.id.home) {
+            changeSave();
+            if(!isChange){
+                return super.onOptionsItemSelected(item);
+            }
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     /**
      * 实体返回按钮的监听
-     * */
+     */
     @Override
     public void onBackPressed() {
-        ToastUtils.toastShort(this, "返回键被点击");
-        super.onBackPressed();
+        changeSave();
+        if(!isChange){
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -101,6 +144,9 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 保存文本
+     * */
     public void save_text() {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
