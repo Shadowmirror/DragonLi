@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.FingerLoginActivity">
+    tools:context=".lock.widget.activity.FingerLoginActivity">
 
     <Button
         android:id="@+id/bt_verify_finger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:text="verify" />
 
 </LinearLayout>

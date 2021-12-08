@@ -10,7 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DragonLi">
-        <activity android:name=".lock.widget.activity.ImageUnlockActivity">
+        <activity
+            android:name=".lock.widget.activity.ImageLockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.FirstUseActivity"
+            android:exported="false" />
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,8 +24,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SecretActivity"
-            android:exported="false" />
+            android:name=".lock.widget.activity.ImageUnlockActivity"
+            android:label="手势登录" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
@@ -32,13 +38,13 @@
             android:label="添加记事"
             android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".lock.widget.activity.PasswordLoginActivity"
+            android:exported="true"
+            android:label="密码登录"
             android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".activity.FingerLoginActivity"
-            android:label="DragonLi">
-
-        </activity>
+            android:name=".lock.widget.activity.FingerLoginActivity"
+            android:label="指纹登录" />
     </application>
 
 </manifest>

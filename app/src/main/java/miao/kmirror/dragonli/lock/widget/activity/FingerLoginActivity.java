@@ -1,4 +1,4 @@
-package miao.kmirror.dragonli.activity;
+package miao.kmirror.dragonli.lock.widget.activity;
 
 
 import android.content.Intent;
@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import java.util.concurrent.Executor;
 
 import miao.kmirror.dragonli.R;
+import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 
@@ -52,7 +53,7 @@ public class FingerLoginActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 ToastUtils.toastShort(FingerLoginActivity.this, "Authentication Succeeded!!");
-                Intent intent = new Intent(FingerLoginActivity.this, SecretActivity.class);
+                Intent intent = new Intent(FingerLoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }
 
