@@ -5,17 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
+import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
+import miao.kmirror.dragonli.utils.PasswordUtils;
+import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class PasswordLoginActivity extends AppCompatActivity{
-
+    public static final String TAG = "PasswordLoginActivity";
     private EditText EtPassword;
     private Button BtVerifyPassword;
 
@@ -40,10 +44,8 @@ public class PasswordLoginActivity extends AppCompatActivity{
             return;
         } else {
             String tempPassword = MD5Utils.getMD5Code(password);
-            String verifyPassword = MD5Utils.getMD5Code(AESEncryptUtils.TEST_PASS);
-            if (verifyPassword.equals(tempPassword)) {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+            if (tempPassword.equals(SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD))) {
+                ActivityUtils.flagActivityClearTask(this, MainActivity.class);
             } else {
                 ToastUtils.toastShort(this, "密码错误");
                 return;

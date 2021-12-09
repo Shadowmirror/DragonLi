@@ -15,6 +15,9 @@ import java.util.concurrent.Executor;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.MainActivity;
+import miao.kmirror.dragonli.utils.ActivityUtils;
+import miao.kmirror.dragonli.utils.PasswordUtils;
+import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 
@@ -53,8 +56,7 @@ public class FingerLoginActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 ToastUtils.toastShort(FingerLoginActivity.this, "Authentication Succeeded!!");
-                Intent intent = new Intent(FingerLoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                ActivityUtils.flagActivityClearTask(FingerLoginActivity.this, MainActivity.class);
             }
 
             @Override

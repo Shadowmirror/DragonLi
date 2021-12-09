@@ -31,7 +31,7 @@ public class FirstUseActivity extends AppCompatActivity {
             String password = EtPassword.getText().toString();
             String againPassword = EtAgainPassword.getText().toString();
             if (password.equals(againPassword)) {
-                SpfUtils.saveString(getApplicationContext(), PasswordUtils.COMMON_PASSWORD, MD5Utils.getMD5Code(password));
+                SpfUtils.saveString(this, PasswordUtils.COMMON_PASSWORD, MD5Utils.getMD5Code(password));
                 Intent intent = new Intent(this, ImageLockActivity.class);
                 startActivity(intent);
             } else {

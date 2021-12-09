@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import miao.kmirror.dragonli.R;
@@ -14,13 +15,12 @@ import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 
 public class LoginActivity extends AppCompatActivity{
-
-    private String commonPassword = SpfUtils.getString(getApplicationContext(), PasswordUtils.COMMON_PASSWORD);
-    private String imagePassword = SpfUtils.getString(getApplicationContext(), PasswordUtils.IMAGE_PASSWORD);
+    public static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(commonPassword == "" && imagePassword == ""){
+
+        if(SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD) == "" && SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD) == ""){
             Intent intent = new Intent(this, FirstUseActivity.class);
             startActivity(intent);
         }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,9 +25,17 @@ import java.util.List;
 import miao.kmirror.dragonli.adapter.MyAdapter;
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.bean.Text;
+import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
+import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
+
+    public boolean appUnLocked = false;
+
+    private long pauseTime = 0;
+
+    private long resumeTime = 0;
 
     public static final String TAG = "MainActivity";
 
@@ -60,6 +69,26 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         refreshDataFromDb();
         setListLayout();
+        if(pauseTime != 0){
+            resumeTime = System.currentTimeMillis();
+            // 离开应用时长
+            if((resumeTime - pauseTime) / 1000 >= 60){
+                ToastUtils.toastShort(this, "离开本应用已 60 秒，本应用自动锁定");
+                ActivityUtils.flagActivityClearTask(this, LoginActivity.class);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pauseTime = System.currentTimeMillis();
+        Log.i(TAG, "onPause: currentTimeMillis = " + pauseTime);
     }
 
     private void refreshDataFromDb() {
@@ -166,5 +195,13 @@ public class MainActivity extends AppCompatActivity {
             menu.findItem(R.id.menu_grid).setChecked(true);
         }
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent= new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 }

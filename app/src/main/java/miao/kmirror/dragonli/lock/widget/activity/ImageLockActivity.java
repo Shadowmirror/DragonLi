@@ -20,7 +20,7 @@ import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class ImageLockActivity extends AppCompatActivity implements ImageLockView.OnGraphChangedListener {
-
+    public static final String TAG = "ImageLockActivity";
     private int passwordCount = 0;
     private ImageLockView mImageLockView;
     private TextView mTvCancel;
@@ -59,7 +59,8 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
             isMatch = true;
         } else {
             if (imagePassword.equals(password)) {
-                SpfUtils.saveString(getApplicationContext(), PasswordUtils.IMAGE_PASSWORD, MD5Utils.getMD5Code(imagePassword));
+                Log.i(TAG, "onGraphFinish: password = " + password);
+                SpfUtils.saveString(this, PasswordUtils.IMAGE_PASSWORD, MD5Utils.getMD5Code(password));
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 ToastUtils.toastShort(this, "密码设置成功！");
