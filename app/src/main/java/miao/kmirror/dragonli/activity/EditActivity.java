@@ -13,6 +13,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.litepal.LitePal;
@@ -28,6 +30,7 @@ import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class EditActivity extends AppCompatActivity {
 
+    Intent intent = getIntent();
     public static final String TAG = "EditActivity";
     private TextInfo text;
     private TextContentDao textContentDao = new TextContentDao();
@@ -36,6 +39,7 @@ public class EditActivity extends AppCompatActivity {
     private EditText etContent;
     private boolean isChange = false;
     private int skipOne = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,11 @@ public class EditActivity extends AppCompatActivity {
 
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);
+
+        Button test = findViewById(R.id.bt_edit_test);
+        test.setOnClickListener(v -> {
+
+        });
 
         /**
          * 文本改变监听
@@ -66,8 +75,6 @@ public class EditActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-
-
         initData();
     }
 
@@ -124,16 +131,41 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_save, menu);
-        MenuItem item = menu.findItem(R.id.menu_save);
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        MenuItem save = menu.findItem(R.id.menu_save);
+        save.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 save_text();
                 return true;
             }
         });
+        MenuItem lock = menu.findItem(R.id.menu_lock);
+        lock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                text.setLocked(!text.getLocked());
+                textInfoDao.update(text);
+                onPrepareOptionsMenu(menu);
+                return true;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
 
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Intent intent = getIntent();
+        text = (TextInfo) intent.getSerializableExtra("text");
+        MenuItem item = menu.findItem(R.id.menu_lock);
+
+        if(text.getLocked()){
+            item.setTitle("已上锁");
+        }else{
+            item.setTitle("未上锁");
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void initData() {

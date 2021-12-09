@@ -6,4 +6,8 @@
         android:id="@+id/menu_save"
         android:title="保存"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_lock"
+        android:title="上锁"
+        app:showAsAction="always" />
 </menu>
