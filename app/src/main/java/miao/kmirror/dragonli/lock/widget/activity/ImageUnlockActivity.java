@@ -47,7 +47,7 @@ public class ImageUnlockActivity extends AppCompatActivity implements ImageLockV
         mTvCancel = (TextView) findViewById(R.id.bt_cancel);
 
         mTvCancel.setOnClickListener(v -> {
-            ActivityUtils.simpleIntent(this, LoginActivity.class);
+            onBackPressed();
         });
         mImageLockView.setOnGraphChangedListener(this);
         mImageLockView.setAlpha(70);

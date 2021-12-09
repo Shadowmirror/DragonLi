@@ -18,20 +18,28 @@ import java.util.List;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.EditActivity;
-import miao.kmirror.dragonli.bean.Text;
+import miao.kmirror.dragonli.activity.MainActivity;
+import miao.kmirror.dragonli.dao.TextContentDao;
+import miao.kmirror.dragonli.dao.TextInfoDao;
+import miao.kmirror.dragonli.entity.TextContent;
+import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.utils.AESEncryptUtils;
+import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Text> mTextList;
+    private List<TextInfo> mTextList;
     private LayoutInflater mLayoutInflater;
     private Context mContext;
+    private TextContentDao textContentDao = new TextContentDao();
+    private TextInfoDao textInfoDao = new TextInfoDao();
 
     private int viewType;
 
     public static final int TYPE_LINEAR_LAYOUT = 0;
     public static final int TYPE_GRID_LAYOUT = 1;
 
-    public MyAdapter(Context context, List<Text> mTextList) {
+    public MyAdapter(Context context, List<TextInfo> mTextList) {
         this.mTextList = mTextList;
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -72,11 +80,16 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void bindMyViewHolder(MyViewHolder holder, int position) {
-        Text text = mTextList.get(position);
+        TextInfo text = mTextList.get(position);
         holder.mTvTitle.setText(text.getTitle());
         // 解密
-        holder.mTvContent.setText(text.getContent());
-        holder.mTvTime.setText(text.getCreatedTime());
+        if(text.getLocked() == false){
+            TextContent textContent = textContentDao.findById(text.getId());
+            holder.mTvContent.setText(AESEncryptUtils.decrypt(textContent.getContent(), AESEncryptUtils.TEST_PASS));
+        }else{
+            holder.mTvContent.setText("该条数据已加密！");
+        }
+        holder.mTvTime.setText(text.getUpdateDate());
         // 设置单击响应事件
         holder.rlContainer.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, EditActivity.class);
@@ -93,11 +106,26 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             TextView tvEdit = dialogView.findViewById(R.id.tv_edit);
 
             tvDelete.setOnClickListener(v1 -> {
-                int row = LitePal.deleteAll(Text.class, "id = ?", text.getId().toString());
-                if (row > 0) {
-                    removeData(position);
+                try{
+                    LitePal.beginTransaction();
+                    int row1 = textInfoDao.delete(text.getId());
+                    int row2 = textContentDao.delete(text.getId());
+                    if(row1 > 0 && row2 > 0){
+                        LitePal.setTransactionSuccessful();
+                        ToastUtils.toastShort(mContext.getApplicationContext(), "删除成功！");
+                        removeData(position);
+                    } else{
+                        ToastUtils.toastShort(mContext.getApplicationContext(), "删除失败！");
+                    }
+                }finally {
+                    LitePal.endTransaction();
+                    dialog.dismiss();
                 }
-                dialog.dismiss();
+//                int row = LitePal.deleteAll(TextInfo.class, "id = ?", text.getId().toString());
+//                if (row > 0) {
+//                    removeData(position);
+//                }
+//                dialog.dismiss();
             });
 
             tvEdit.setOnClickListener(v1 -> {
@@ -113,7 +141,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
     }
 
-    public void refreshData(List<Text> texts) {
+    public void refreshData(List<TextInfo> texts) {
         this.mTextList = texts;
         notifyDataSetChanged();
     }

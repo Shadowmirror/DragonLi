@@ -16,20 +16,21 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.litepal.LitePal;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 import miao.kmirror.dragonli.adapter.MyAdapter;
 import miao.kmirror.dragonli.R;
-import miao.kmirror.dragonli.bean.Text;
+import miao.kmirror.dragonli.dao.TextInfoDao;
+import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextInfoDao textInfoDao = new TextInfoDao();
 
     public boolean appUnLocked = false;
 
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton mBtnAdd;
 
-    private List<Text> mTextList;
+    private List<TextInfo> mTextList;
 
     private MyAdapter mMyAdapter;
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initView();
         initData();
         initEvent();
@@ -88,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         pauseTime = System.currentTimeMillis();
-        Log.i(TAG, "onPause: currentTimeMillis = " + pauseTime);
     }
 
     private void refreshDataFromDb() {
@@ -96,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
         mMyAdapter.refreshData(mTextList);
     }
 
-    private List<Text> getDataFromDb() {
-        return LitePal.findAll(Text.class);
+    private List<TextInfo> getDataFromDb() {
+        return textInfoDao.findAll();
     }
 
     private void initEvent() {
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mTextList = LitePal.where("title like ?", "%" + newText + "%").find(Text.class);
+                mTextList = textInfoDao.findLikeTitleKey(newText);
                 mMyAdapter.refreshData(mTextList);
                 return true;
             }

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,18 +13,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ScrollView;
 
 import org.litepal.LitePal;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import miao.kmirror.dragonli.R;
-import miao.kmirror.dragonli.bean.Text;
+import miao.kmirror.dragonli.dao.TextContentDao;
+import miao.kmirror.dragonli.dao.TextInfoDao;
+import miao.kmirror.dragonli.entity.TextContent;
+import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
@@ -33,7 +29,9 @@ import miao.kmirror.dragonli.utils.ToastUtils;
 public class EditActivity extends AppCompatActivity {
 
     public static final String TAG = "EditActivity";
-    private Text text;
+    private TextInfo text;
+    private TextContentDao textContentDao = new TextContentDao();
+    private TextInfoDao textInfoDao = new TextInfoDao();
     private EditText etTitle;
     private EditText etContent;
     private boolean isChange = false;
@@ -43,6 +41,8 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        Intent intent = getIntent();
+        text = (TextInfo) intent.getSerializableExtra("text");
 
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);
@@ -138,10 +138,11 @@ public class EditActivity extends AppCompatActivity {
 
     private void initData() {
         Intent intent = getIntent();
-        text = (Text) intent.getSerializableExtra("text");
+        text = (TextInfo) intent.getSerializableExtra("text");
         if (text != null) {
             etTitle.setText(text.getTitle());
-            String temp = AESEncryptUtils.decrypt(text.getContent(), AESEncryptUtils.TEST_PASS);
+            TextContent textContent = textContentDao.findById(text.getId());
+            String temp = AESEncryptUtils.decrypt(textContent.getContent(), AESEncryptUtils.TEST_PASS);
             etContent.setText(temp);
         }
     }
@@ -156,18 +157,38 @@ public class EditActivity extends AppCompatActivity {
             ToastUtils.toastShort(this, "标题不能为空！");
             return;
         }
-
+        TextContent textContent = textContentDao.findById(text.getId());
         text.setTitle(title);
-        String temp = AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS);
-        // 加密
-        text.setContent(temp);
-        text.setCreatedTime(DateUtils.getCurrentTimeFormat());
-        int row = text.updateAll("id = ?", text.getId().toString());
-        if (row != -1) {
-            ToastUtils.toastShort(this, "修改成功！");
-            this.finish();
-        } else {
-            ToastUtils.toastShort(this, "修改失败！");
+        text.setUpdateDate(DateUtils.getCurrentTimeFormat());
+        textContent.setContent(AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS));
+        // 开启事务操作
+        try{
+            LitePal.beginTransaction();
+            int row1 = textInfoDao.update(text);
+            int row2 = textContentDao.update(textContent);
+            if(row1 > 0 && row2 > 0){
+                LitePal.setTransactionSuccessful();
+                ToastUtils.toastShort(this, "修改成功！");
+                this.finish();
+            } else {
+                ToastUtils.toastShort(this, "修改失败！");
+            }
+        } finally {
+            LitePal.endTransaction();
         }
+
+
+//        text.setTitle(title);
+//        String temp = AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS);
+//        // 加密
+//        text.setContent(temp);
+//        text.setCreatedTime(DateUtils.getCurrentTimeFormat());
+//        int row = text.updateAll("id = ?", text.getId().toString());
+//        if (row != -1) {
+//            ToastUtils.toastShort(this, "修改成功！");
+//            this.finish();
+//        } else {
+//            ToastUtils.toastShort(this, "修改失败！");
+//        }
     }
 }

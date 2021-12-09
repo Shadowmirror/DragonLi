@@ -10,12 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DragonLi">
-        <activity
-            android:name=".lock.widget.activity.ImageLockActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.FirstUseActivity"
-            android:exported="false" />
+
+
+        <!-- 登录模块 -->
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,14 +21,34 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".lock.widget.activity.PasswordLoginActivity"
+            android:exported="true"
+            android:label="密码登录"
+            android:parentActivityName=".activity.LoginActivity" />
+        <activity
+            android:name=".lock.widget.activity.FingerLoginActivity"
+            android:label="指纹登录"
+            android:parentActivityName=".activity.LoginActivity" />
+        <activity
             android:name=".lock.widget.activity.ImageUnlockActivity"
-            android:label="手势登录" />
+            android:label="手势登录"
+            android:parentActivityName=".activity.LoginActivity" />
+
+
+        <!-- 设置密码模块 -->
+        <activity
+            android:name=".lock.widget.activity.ImageLockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.FirstUseActivity"
+            android:exported="false" />
+
+
+        <!-- 记事本功能模块 -->
         <activity
             android:name=".activity.MainActivity"
-            android:label="主页面"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"
+            android:label="主页面"></activity>
         <activity
             android:name=".activity.EditActivity"
             android:label="编辑记事"
@@ -39,15 +56,10 @@
         <activity
             android:name=".activity.AddActivity"
             android:label="添加记事"
-            android:parentActivityName=".activity.MainActivity" />
-        <activity
-            android:name=".lock.widget.activity.PasswordLoginActivity"
-            android:exported="true"
-            android:label="密码登录"
-            android:parentActivityName=".activity.MainActivity" />
-        <activity
-            android:name=".lock.widget.activity.FingerLoginActivity"
-            android:label="指纹登录" />
+            android:parentActivityName=".activity.MainActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

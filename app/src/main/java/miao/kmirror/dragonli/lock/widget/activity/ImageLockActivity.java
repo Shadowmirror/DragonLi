@@ -54,12 +54,11 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
 
         if (isMatch == false) {
             imagePassword = password;
-            mTvTitle.setText("请再次绘制");
+            mTvTitle.setText("请再次绘制请再次绘制");
             mImageLockView.resetGraphicalPassword();
             isMatch = true;
         } else {
             if (imagePassword.equals(password)) {
-                Log.i(TAG, "onGraphFinish: password = " + password);
                 SpfUtils.saveString(this, PasswordUtils.IMAGE_PASSWORD, MD5Utils.getMD5Code(password));
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
