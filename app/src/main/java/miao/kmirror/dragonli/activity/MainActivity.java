@@ -27,6 +27,7 @@ import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import pl.com.salsoft.sqlitestudioremote.SQLiteStudioService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // SqliteStudio
+        SQLiteStudioService.instance().start(this);
 
         initView();
         initData();

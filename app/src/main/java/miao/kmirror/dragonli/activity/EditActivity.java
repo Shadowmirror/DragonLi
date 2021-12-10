@@ -53,7 +53,13 @@ public class EditActivity extends AppCompatActivity {
 
         Button test = findViewById(R.id.bt_edit_test);
         test.setOnClickListener(v -> {
-
+            Log.i(TAG, "onCreate: text = " + text.toString());
+            Log.i(TAG, "onCreate: text.isLocked = " + text.getLocked());
+            TextInfo temp = new TextInfo();
+            temp.setLocked(!text.getLocked());
+            temp.update(1);
+            Log.i(TAG, "onCreate: update = " + textInfoDao.update(text));
+            Log.i(TAG, "onCreate: update_text = " + textInfoDao.findById(text.getId()));
         });
 
         /**
@@ -143,8 +149,9 @@ public class EditActivity extends AppCompatActivity {
         lock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                // 解决数据库无法更新问题
                 text.setLocked(!text.getLocked());
-                textInfoDao.update(text);
+                textInfoDao.updateLockState(text);
                 onPrepareOptionsMenu(menu);
                 return true;
             }
@@ -162,8 +169,10 @@ public class EditActivity extends AppCompatActivity {
 
         if(text.getLocked()){
             item.setTitle("已上锁");
+            Log.i(TAG, "onPrepareOptionsMenu: 已上锁");
         }else{
             item.setTitle("未上锁");
+            Log.i(TAG, "onPrepareOptionsMenu: 解锁");
         }
         return super.onPrepareOptionsMenu(menu);
     }
