@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import miao.kmirror.dragonli.activity.MainActivity;
+import miao.kmirror.dragonli.entity.TextInfo;
 
 public class ActivityUtils {
     public static void flagActivityClearTask(Context thisContext, Class flagActivity){
@@ -20,6 +21,12 @@ public class ActivityUtils {
 
     public static void simpleIntent(Context thisContext, Class flagActivity){
         Intent intent = new Intent(thisContext, flagActivity);
+        thisContext.startActivity(intent);
+    }
+
+    public static void simpleIntentWithTextInfo(Context thisContext, Class flagActivity, TextInfo textInfo){
+        Intent intent = new Intent(thisContext, flagActivity);
+        intent.putExtra("textInfo", textInfo);
         thisContext.startActivity(intent);
     }
 }

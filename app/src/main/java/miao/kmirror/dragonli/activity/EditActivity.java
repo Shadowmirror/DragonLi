@@ -3,6 +3,7 @@ package miao.kmirror.dragonli.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +14,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -24,6 +24,7 @@ import miao.kmirror.dragonli.dao.TextContentDao;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.fragment.EditNameDialogFragment;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
@@ -53,13 +54,7 @@ public class EditActivity extends AppCompatActivity {
 
         Button test = findViewById(R.id.bt_edit_test);
         test.setOnClickListener(v -> {
-            Log.i(TAG, "onCreate: text = " + text.toString());
-            Log.i(TAG, "onCreate: text.isLocked = " + text.getLocked());
-            TextInfo temp = new TextInfo();
-            temp.setLocked(!text.getLocked());
-            temp.update(1);
-            Log.i(TAG, "onCreate: update = " + textInfoDao.update(text));
-            Log.i(TAG, "onCreate: update_text = " + textInfoDao.findById(text.getId()));
+            selectSingleLockType();
         });
 
         /**
@@ -81,6 +76,9 @@ public class EditActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+
+
         initData();
     }
 
@@ -145,13 +143,16 @@ public class EditActivity extends AppCompatActivity {
                 return true;
             }
         });
+        //
         MenuItem lock = menu.findItem(R.id.menu_lock);
         lock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+//                selectSingleLockType();
+                showEditDialog();
                 // 解决数据库无法更新问题
-                text.setLocked(!text.getLocked());
-                textInfoDao.updateLockState(text);
+//                text.setLocked(!text.getLocked());
+//                textInfoDao.updateLockState(text);
                 onPrepareOptionsMenu(menu);
                 return true;
             }
@@ -159,6 +160,22 @@ public class EditActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
 
+    }
+    /**
+     * 单条数据加密方式选择弹窗
+     * */
+    private void selectSingleLockType() {
+//        Log.i(TAG, "selectSingleLockType: mmm");
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setView(R.layout.list_item_single_lock_type_layout);
+//        builder.create().show();
+
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        EditNameDialogFragment editNameDialogFragment = new EditNameDialogFragment(text);
+        editNameDialogFragment.show(fm, "fragment_edit_name");
     }
 
     @Override
@@ -218,18 +235,7 @@ public class EditActivity extends AppCompatActivity {
             LitePal.endTransaction();
         }
 
-
-//        text.setTitle(title);
-//        String temp = AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS);
-//        // 加密
-//        text.setContent(temp);
-//        text.setCreatedTime(DateUtils.getCurrentTimeFormat());
-//        int row = text.updateAll("id = ?", text.getId().toString());
-//        if (row != -1) {
-//            ToastUtils.toastShort(this, "修改成功！");
-//            this.finish();
-//        } else {
-//            ToastUtils.toastShort(this, "修改失败！");
-//        }
     }
+
+
 }

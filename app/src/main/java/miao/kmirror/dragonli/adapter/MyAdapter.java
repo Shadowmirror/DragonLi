@@ -121,11 +121,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     LitePal.endTransaction();
                     dialog.dismiss();
                 }
-//                int row = LitePal.deleteAll(TextInfo.class, "id = ?", text.getId().toString());
-//                if (row > 0) {
-//                    removeData(position);
-//                }
-//                dialog.dismiss();
             });
 
             tvEdit.setOnClickListener(v1 -> {
