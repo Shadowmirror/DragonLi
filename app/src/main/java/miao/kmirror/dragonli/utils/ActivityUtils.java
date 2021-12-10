@@ -29,4 +29,11 @@ public class ActivityUtils {
         intent.putExtra("textInfo", textInfo);
         thisContext.startActivity(intent);
     }
+
+    public static void simpleIntentWithTextInfo(Context thisContext, Class flagActivity, TextInfo textInfo, int unlockType){
+        Intent intent = new Intent(thisContext, flagActivity);
+        intent.putExtra("textInfo", textInfo);
+        intent.putExtra("unlockType", unlockType);
+        thisContext.startActivity(intent);
+    }
 }

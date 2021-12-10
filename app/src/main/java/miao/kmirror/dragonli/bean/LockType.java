@@ -8,4 +8,6 @@ public class LockType {
 
     public static final int FINGER_LOCK = 3;
 
+    public static final int TEMP_UNLOCK = 1;
+
 }

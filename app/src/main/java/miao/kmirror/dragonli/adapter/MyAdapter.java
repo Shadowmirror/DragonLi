@@ -93,7 +93,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // 设置单击响应事件
         holder.rlContainer.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, EditActivity.class);
-            intent.putExtra("text", text);
+            intent.putExtra("textInfo", text);
             mContext.startActivity(intent);
         });
 
@@ -125,7 +125,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             tvEdit.setOnClickListener(v1 -> {
                 Intent intent = new Intent(mContext, EditActivity.class);
-                intent.putExtra("text", text);
+                intent.putExtra("textInfo", text);
                 mContext.startActivity(intent);
                 dialog.dismiss();
             });

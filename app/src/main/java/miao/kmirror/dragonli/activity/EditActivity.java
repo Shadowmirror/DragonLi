@@ -20,34 +20,53 @@ import android.widget.EditText;
 import org.litepal.LitePal;
 
 import miao.kmirror.dragonli.R;
+import miao.kmirror.dragonli.bean.LockType;
 import miao.kmirror.dragonli.dao.TextContentDao;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.fragment.EditNameDialogFragment;
+import miao.kmirror.dragonli.singleActivity.SinglePasswordUnlockActivity;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
+import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class EditActivity extends AppCompatActivity {
 
-    Intent intent = getIntent();
     public static final String TAG = "EditActivity";
-    private TextInfo text;
+    private TextInfo textInfo;
     private TextContentDao textContentDao = new TextContentDao();
     private TextInfoDao textInfoDao = new TextInfoDao();
     private EditText etTitle;
     private EditText etContent;
     private boolean isChange = false;
     private int skipOne = 1;
+    private MenuItem lockTitle;
+    private int unlockType;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         Intent intent = getIntent();
-        text = (TextInfo) intent.getSerializableExtra("text");
+        unlockType = intent.getIntExtra("unlockType", 0);
+        textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
+
+        if(textInfo.getLocked()){
+            switch (textInfo.getLockType()){
+                case LockType.PASSWORD_LOCK:{
+                    finish();
+                    ActivityUtils.simpleIntentWithTextInfo(this, SinglePasswordUnlockActivity.class, textInfo);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
 
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);
@@ -85,7 +104,7 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        text = textInfoDao.findById(text.getId());
+        textInfo = textInfoDao.findById(textInfo.getId());
     }
 
     /**
@@ -154,7 +173,7 @@ public class EditActivity extends AppCompatActivity {
         lock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(text.getLocked()){
+                if(textInfo.getLocked()){
                     ToastUtils.toastShort(EditActivity.this, "数据已经上锁了哦");
                 }else{
                     showEditDialog();
@@ -180,30 +199,30 @@ public class EditActivity extends AppCompatActivity {
 
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = new EditNameDialogFragment(text);
+        EditNameDialogFragment editNameDialogFragment = new EditNameDialogFragment(textInfo);
         editNameDialogFragment.show(fm, "fragment_edit_name");
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         Intent intent = getIntent();
-        text = (TextInfo) intent.getSerializableExtra("text");
-        MenuItem item = menu.findItem(R.id.menu_lock);
+        textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
+        lockTitle = menu.findItem(R.id.menu_lock);
 
-        if(text.getLocked()){
-            item.setTitle("已上锁");
+        if(textInfo.getLocked() || unlockType == LockType.TEMP_UNLOCK){
+            lockTitle.setTitle("已上锁");
         }else{
-            item.setTitle("未上锁");
+            lockTitle.setTitle("未上锁");
         }
         return super.onPrepareOptionsMenu(menu);
     }
 
     private void initData() {
         Intent intent = getIntent();
-        text = (TextInfo) intent.getSerializableExtra("text");
-        if (text != null) {
-            etTitle.setText(text.getTitle());
-            TextContent textContent = textContentDao.findById(text.getId());
+        textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
+        if (textInfo != null) {
+            etTitle.setText(textInfo.getTitle());
+            TextContent textContent = textContentDao.findById(textInfo.getId());
             String temp = AESEncryptUtils.decrypt(textContent.getContent(), AESEncryptUtils.TEST_PASS);
             etContent.setText(temp);
         }
@@ -219,14 +238,14 @@ public class EditActivity extends AppCompatActivity {
             ToastUtils.toastShort(this, "标题不能为空！");
             return;
         }
-        TextContent textContent = textContentDao.findById(text.getId());
-        text.setTitle(title);
-        text.setUpdateDate(DateUtils.getCurrentTimeFormat());
+        TextContent textContent = textContentDao.findById(textInfo.getId());
+        textInfo.setTitle(title);
+        textInfo.setUpdateDate(DateUtils.getCurrentTimeFormat());
         textContent.setContent(AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS));
         // 开启事务操作
         try{
             LitePal.beginTransaction();
-            int row1 = textInfoDao.update(text);
+            int row1 = textInfoDao.update(textInfo);
             int row2 = textContentDao.update(textContent);
             if(row1 > 0 && row2 > 0){
                 LitePal.setTransactionSuccessful();
