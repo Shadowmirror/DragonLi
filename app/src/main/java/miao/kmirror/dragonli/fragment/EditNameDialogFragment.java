@@ -10,10 +10,12 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.lock.widget.activity.FingerLoginActivity;
+import miao.kmirror.dragonli.singleActivity.SinglePasswordLockActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
@@ -24,6 +26,7 @@ public class EditNameDialogFragment extends DialogFragment {
     private Button toImage;
 
     private TextInfo textInfo;
+
 
     public EditNameDialogFragment(TextInfo textInfo) {
         this.textInfo = textInfo;
@@ -51,7 +54,7 @@ public class EditNameDialogFragment extends DialogFragment {
             ToastUtils.toastShort(getContext(), "You click image");
         });
         toPassword.setOnClickListener(v -> {
-            ToastUtils.toastShort(getContext(), "You click password");
+            ActivityUtils.simpleIntentWithTextInfo(getActivity(), SinglePasswordLockActivity.class, textInfo);
         });
         // Fetch arguments from bundle and set title
         // Show soft keyboard automatically and request focus to field

@@ -52,6 +52,9 @@ public class TextInfo extends LitePalSupport implements Serializable {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getUpdateDate() {
         return updateDate;

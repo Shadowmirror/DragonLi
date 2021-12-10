@@ -12,12 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DragonLi">
-
-
-        <!-- 登录模块 -->
-        <activity android:name=".activity.LoginActivity">
-
-        </activity>
+        <activity
+            android:name=".singleActivity.SinglePasswordUnlockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".singleActivity.SinglePasswordLockActivity"
+            android:exported="false" /> <!-- 登录模块 -->
+        <activity android:name=".activity.LoginActivity" />
         <activity
             android:name=".lock.widget.activity.PasswordLoginActivity"
             android:exported="true"
@@ -30,19 +31,13 @@
         <activity
             android:name=".lock.widget.activity.ImageUnlockActivity"
             android:label="手势登录"
-            android:parentActivityName=".activity.LoginActivity" />
-
-
-        <!-- 设置密码模块 -->
+            android:parentActivityName=".activity.LoginActivity" /> <!-- 设置密码模块 -->
         <activity
             android:name=".lock.widget.activity.ImageLockActivity"
             android:exported="false" />
         <activity
             android:name=".activity.FirstUseActivity"
-            android:exported="false" />
-
-
-        <!-- 记事本功能模块 -->
+            android:exported="false" /> <!-- 记事本功能模块 -->
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
@@ -60,10 +55,7 @@
         <activity
             android:name=".activity.AddActivity"
             android:label="添加记事"
-            android:parentActivityName=".activity.MainActivity">
-
-        </activity>
-
+            android:parentActivityName=".activity.MainActivity" />
     </application>
 
 </manifest>

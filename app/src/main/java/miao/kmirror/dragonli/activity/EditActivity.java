@@ -82,6 +82,12 @@ public class EditActivity extends AppCompatActivity {
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        text = textInfoDao.findById(text.getId());
+    }
+
     /**
      * 返回按钮的是否保存事件
      * */
@@ -148,11 +154,11 @@ public class EditActivity extends AppCompatActivity {
         lock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-//                selectSingleLockType();
-                showEditDialog();
-                // 解决数据库无法更新问题
-//                text.setLocked(!text.getLocked());
-//                textInfoDao.updateLockState(text);
+                if(text.getLocked()){
+                    ToastUtils.toastShort(EditActivity.this, "数据已经上锁了哦");
+                }else{
+                    showEditDialog();
+                }
                 onPrepareOptionsMenu(menu);
                 return true;
             }
@@ -186,10 +192,8 @@ public class EditActivity extends AppCompatActivity {
 
         if(text.getLocked()){
             item.setTitle("已上锁");
-            Log.i(TAG, "onPrepareOptionsMenu: 已上锁");
         }else{
             item.setTitle("未上锁");
-            Log.i(TAG, "onPrepareOptionsMenu: 解锁");
         }
         return super.onPrepareOptionsMenu(menu);
     }
