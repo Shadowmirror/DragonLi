@@ -56,9 +56,9 @@ public class EditActivity extends AppCompatActivity {
         unlockType = intent.getIntExtra("unlockType", 0);
         textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
 
-        if(textInfo.getLocked()){
-            switch (textInfo.getLockType()){
-                case LockType.PASSWORD_LOCK:{
+        if (textInfo.getLocked()) {
+            switch (textInfo.getLockType()) {
+                case LockType.PASSWORD_LOCK: {
                     finish();
                     ActivityUtils.simpleIntentWithTextInfo(this, SinglePasswordUnlockActivity.class, textInfo);
                     break;
@@ -71,11 +71,6 @@ public class EditActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);
 
-        Button test = findViewById(R.id.bt_edit_test);
-        test.setOnClickListener(v -> {
-            selectSingleLockType();
-        });
-
         /**
          * 文本改变监听
          * */
@@ -87,15 +82,15 @@ public class EditActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               if(skipOne++ != 1 && count > 0){
-                   isChange = true;
-               }
+                if (skipOne++ != 1 && count > 0) {
+                    isChange = true;
+                }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-
 
 
         initData();
@@ -109,7 +104,7 @@ public class EditActivity extends AppCompatActivity {
 
     /**
      * 返回按钮的是否保存事件
-     * */
+     */
     public void changeSave() {
         if (isChange) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditActivity.this);
@@ -139,7 +134,7 @@ public class EditActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             changeSave();
-            if(!isChange){
+            if (!isChange) {
                 return super.onOptionsItemSelected(item);
             }
         }
@@ -152,7 +147,7 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         changeSave();
-        if(!isChange){
+        if (!isChange) {
             super.onBackPressed();
         }
     }
@@ -173,9 +168,9 @@ public class EditActivity extends AppCompatActivity {
         lock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(textInfo.getLocked()){
+                if (textInfo.getLocked() || unlockType == LockType.TEMP_UNLOCK) {
                     ToastUtils.toastShort(EditActivity.this, "数据已经上锁了哦");
-                }else{
+                } else {
                     showEditDialog();
                 }
                 onPrepareOptionsMenu(menu);
@@ -186,17 +181,10 @@ public class EditActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
 
     }
+
     /**
-     * 单条数据加密方式选择弹窗
-     * */
-    private void selectSingleLockType() {
-//        Log.i(TAG, "selectSingleLockType: mmm");
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setView(R.layout.list_item_single_lock_type_layout);
-//        builder.create().show();
-
-    }
-
+     * 选择加密方式
+     */
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
         EditNameDialogFragment editNameDialogFragment = new EditNameDialogFragment(textInfo);
@@ -209,9 +197,9 @@ public class EditActivity extends AppCompatActivity {
         textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
         lockTitle = menu.findItem(R.id.menu_lock);
 
-        if(textInfo.getLocked() || unlockType == LockType.TEMP_UNLOCK){
+        if (textInfo.getLocked() || unlockType == LockType.TEMP_UNLOCK) {
             lockTitle.setTitle("已上锁");
-        }else{
+        } else {
             lockTitle.setTitle("未上锁");
         }
         return super.onPrepareOptionsMenu(menu);
@@ -230,7 +218,7 @@ public class EditActivity extends AppCompatActivity {
 
     /**
      * 保存文本
-     * */
+     */
     public void save_text() {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
@@ -243,11 +231,11 @@ public class EditActivity extends AppCompatActivity {
         textInfo.setUpdateDate(DateUtils.getCurrentTimeFormat());
         textContent.setContent(AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS));
         // 开启事务操作
-        try{
+        try {
             LitePal.beginTransaction();
             int row1 = textInfoDao.update(textInfo);
             int row2 = textContentDao.update(textContent);
-            if(row1 > 0 && row2 > 0){
+            if (row1 > 0 && row2 > 0) {
                 LitePal.setTransactionSuccessful();
                 ToastUtils.toastShort(this, "修改成功！");
                 this.finish();
