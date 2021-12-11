@@ -26,6 +26,7 @@ import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.fragment.EditNameDialogFragment;
+import miao.kmirror.dragonli.lock.widget.activity.PasswordLoginActivity;
 import miao.kmirror.dragonli.singleActivity.SinglePasswordUnlockActivity;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.ActivityUtils;
@@ -169,7 +170,13 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (textInfo.getLocked() || unlockType == LockType.TEMP_UNLOCK) {
-                    ToastUtils.toastShort(EditActivity.this, "数据已经上锁了哦");
+                    switch (textInfo.getLockType()) {
+                        case LockType.PASSWORD_LOCK:
+                            ActivityUtils.simpleIntentWithTextInfo(EditActivity.this, PasswordLoginActivity.class, textInfo);
+                            break;
+                        default:
+                            break;
+                    }
                 } else {
                     showEditDialog();
                 }
@@ -227,6 +234,7 @@ public class EditActivity extends AppCompatActivity {
             return;
         }
         TextContent textContent = textContentDao.findById(textInfo.getId());
+        textInfo = textInfoDao.findById(textInfo.getId());
         textInfo.setTitle(title);
         textInfo.setUpdateDate(DateUtils.getCurrentTimeFormat());
         textContent.setContent(AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS));

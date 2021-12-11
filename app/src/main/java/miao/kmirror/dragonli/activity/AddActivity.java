@@ -121,6 +121,8 @@ public class AddActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_save, menu);
         MenuItem item = menu.findItem(R.id.menu_save);
+        MenuItem lock = menu.findItem(R.id.menu_lock);
+        lock.setVisible(false);
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

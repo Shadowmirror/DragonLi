@@ -33,12 +33,21 @@ public class TextInfoDao {
 
     public int update(TextInfo info) {
         textInfo = info;
+        updateLockState(textInfo);
+        updateLockType(textInfo);
         return textInfo.update(textInfo.getId());
     }
 
-    public int updateLockState(TextInfo info) {
+    private int updateLockState(TextInfo info) {
         ContentValues values = new ContentValues();
         values.put("isLocked", info.getLocked());
+        int update = LitePal.update(TextInfo.class, values, info.getId());
+        return update;
+    }
+
+    private int updateLockType(TextInfo info){
+        ContentValues values = new ContentValues();
+        values.put("lockType", info.getLockType());
         int update = LitePal.update(TextInfo.class, values, info.getId());
         return update;
     }
