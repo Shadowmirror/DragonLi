@@ -46,8 +46,7 @@ public class SinglePasswordUnlockActivity extends AppCompatActivity {
             String tempPassword = MD5Utils.getMD5Code(password);
             if (tempPassword.equals(textInfo.getPassword())) {
                 finish();
-                textInfo.setLocked(false);
-                ActivityUtils.simpleIntentWithTextInfo(this, EditActivity.class, textInfo, LockType.TEMP_UNLOCK);
+                ActivityUtils.simpleIntentWithTextInfo(this, EditActivity.class, textInfo, "tempUnlock", LockType.TEMP_UNLOCK);
             } else {
                 ToastUtils.toastShort(this, "密码错误");
                 return;

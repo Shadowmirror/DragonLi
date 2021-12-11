@@ -16,4 +16,6 @@ public class LockType {
 
     public static final int TEMP_UNLOCK = 1;
 
+    public static final int NON_TEMP_UNLOCK = 0;
+
 }

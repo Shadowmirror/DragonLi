@@ -13,27 +13,27 @@ import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.entity.TextInfo;
 
 public class ActivityUtils {
-    public static void flagActivityClearTask(Context thisContext, Class flagActivity){
+    public static void flagActivityClearTask(Context thisContext, Class flagActivity) {
         Intent intent = new Intent(thisContext, flagActivity)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         thisContext.startActivity(intent);
     }
 
-    public static void simpleIntent(Context thisContext, Class flagActivity){
+    public static void simpleIntent(Context thisContext, Class flagActivity) {
         Intent intent = new Intent(thisContext, flagActivity);
         thisContext.startActivity(intent);
     }
 
-    public static void simpleIntentWithTextInfo(Context thisContext, Class flagActivity, TextInfo textInfo){
+    public static void simpleIntentWithTextInfo(Context thisContext, Class flagActivity, TextInfo textInfo) {
         Intent intent = new Intent(thisContext, flagActivity);
         intent.putExtra("textInfo", textInfo);
         thisContext.startActivity(intent);
     }
 
-    public static void simpleIntentWithTextInfo(Context thisContext, Class flagActivity, TextInfo textInfo, int unlockType){
+    public static void simpleIntentWithTextInfo(Context thisContext, Class flagActivity, TextInfo textInfo, String name, int value) {
         Intent intent = new Intent(thisContext, flagActivity);
         intent.putExtra("textInfo", textInfo);
-        intent.putExtra("unlockType", unlockType);
+        intent.putExtra(name, value);
         thisContext.startActivity(intent);
     }
 }

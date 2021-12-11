@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.entity.TextInfo;
@@ -19,7 +18,7 @@ import miao.kmirror.dragonli.singleActivity.SinglePasswordLockActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
-public class EditNameDialogFragment extends DialogFragment {
+public class SelectLockTypeFragment extends DialogFragment {
 
     private Button toFinger;
     private Button toPassword;
@@ -28,7 +27,7 @@ public class EditNameDialogFragment extends DialogFragment {
     private TextInfo textInfo;
 
 
-    public EditNameDialogFragment(TextInfo textInfo) {
+    public SelectLockTypeFragment(TextInfo textInfo) {
         this.textInfo = textInfo;
     }
 
@@ -36,7 +35,10 @@ public class EditNameDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_edit_name, container);
+        final Window window = getDialog().getWindow();
+        View view = inflater.inflate(R.layout.fragment_select_lock_type, ((ViewGroup) window.findViewById(android.R.id.content)), false);
+        window.setLayout(-1, -2);
+        return view;
     }
 
     @Override
@@ -58,7 +60,9 @@ public class EditNameDialogFragment extends DialogFragment {
         });
         // Fetch arguments from bundle and set title
         // Show soft keyboard automatically and request focus to field
-        getDialog().getWindow().setSoftInputMode(
+        getDialog().getWindow()
+                .setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
     }
 }

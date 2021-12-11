@@ -25,7 +25,7 @@ import miao.kmirror.dragonli.dao.TextContentDao;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
-import miao.kmirror.dragonli.fragment.EditNameDialogFragment;
+import miao.kmirror.dragonli.fragment.SelectLockTypeFragment;
 import miao.kmirror.dragonli.lock.widget.activity.PasswordLoginActivity;
 import miao.kmirror.dragonli.singleActivity.SinglePasswordUnlockActivity;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
@@ -44,7 +44,7 @@ public class EditActivity extends AppCompatActivity {
     private boolean isChange = false;
     private int skipOne = 1;
     private MenuItem lockTitle;
-    private int unlockType;
+    private int tempUnlock;
 
 
     @Override
@@ -54,10 +54,10 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         Intent intent = getIntent();
-        unlockType = intent.getIntExtra("unlockType", 0);
+        tempUnlock = intent.getIntExtra("tempUnlock", 0);
         textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
 
-        if (textInfo.getLocked()) {
+        if (textInfo.getLocked() && tempUnlock == LockType.NON_TEMP_UNLOCK) {
             switch (textInfo.getLockType()) {
                 case LockType.PASSWORD_LOCK: {
                     finish();
@@ -101,6 +101,9 @@ public class EditActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         textInfo = textInfoDao.findById(textInfo.getId());
+        if(tempUnlock == LockType.TEMP_UNLOCK && textInfo.getLocked() == false){
+            lockTitle.setTitle("未上锁");
+        }
     }
 
     /**
@@ -169,7 +172,9 @@ public class EditActivity extends AppCompatActivity {
         lock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (textInfo.getLocked() || unlockType == LockType.TEMP_UNLOCK) {
+                Log.i(TAG, "onMenuItemClick: getLocked =  " + textInfo.getLocked());
+                Log.i(TAG, "onMenuItemClick: getLockType =  " + textInfo.getLockType());
+                if (textInfo.getLocked()) {
                     switch (textInfo.getLockType()) {
                         case LockType.PASSWORD_LOCK:
                             ActivityUtils.simpleIntentWithTextInfo(EditActivity.this, PasswordLoginActivity.class, textInfo);
@@ -194,17 +199,17 @@ public class EditActivity extends AppCompatActivity {
      */
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = new EditNameDialogFragment(textInfo);
-        editNameDialogFragment.show(fm, "fragment_edit_name");
+        SelectLockTypeFragment selectLockTypeFragment = new SelectLockTypeFragment(textInfo);
+        selectLockTypeFragment.show(fm, "fragment_select_lock_type");
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         Intent intent = getIntent();
         textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
+        textInfo = textInfoDao.findById(textInfo.getId());
         lockTitle = menu.findItem(R.id.menu_lock);
-
-        if (textInfo.getLocked() || unlockType == LockType.TEMP_UNLOCK) {
+        if (textInfo.getLocked()) {
             lockTitle.setTitle("已上锁");
         } else {
             lockTitle.setTitle("未上锁");
