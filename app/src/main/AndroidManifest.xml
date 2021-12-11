@@ -13,12 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DragonLi">
         <activity
+            android:name=".singleActivity.SingleImageLockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".singleActivity.SingleFingerLockActivity"
+            android:exported="false" />
+        <activity
             android:name=".singleActivity.SinglePasswordUnlockActivity"
             android:exported="false" />
         <activity
             android:name=".singleActivity.SinglePasswordLockActivity"
             android:exported="false" /> <!-- 登录模块 -->
-        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".lock.widget.activity.PasswordLoginActivity"
             android:exported="true"
@@ -41,13 +53,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
-            android:label="主页面">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="主页面"></activity>
         <activity
             android:name=".activity.EditActivity"
             android:label="编辑记事"

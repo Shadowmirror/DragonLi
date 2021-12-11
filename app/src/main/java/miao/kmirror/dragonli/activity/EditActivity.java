@@ -27,6 +27,7 @@ import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.fragment.SelectLockTypeFragment;
 import miao.kmirror.dragonli.lock.widget.activity.PasswordLoginActivity;
+import miao.kmirror.dragonli.singleActivity.SingleFingerLockActivity;
 import miao.kmirror.dragonli.singleActivity.SinglePasswordUnlockActivity;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.ActivityUtils;
@@ -59,11 +60,13 @@ public class EditActivity extends AppCompatActivity {
 
         if (textInfo.getLocked() && tempUnlock == LockType.NON_TEMP_UNLOCK) {
             switch (textInfo.getLockType()) {
-                case LockType.PASSWORD_LOCK: {
+                case LockType.PASSWORD_LOCK:
                     finish();
                     ActivityUtils.simpleIntentWithTextInfo(this, SinglePasswordUnlockActivity.class, textInfo);
                     break;
-                }
+                case LockType.FINGER_LOCK:
+                    finish();
+                    ActivityUtils.simpleIntentWithTextInfo(this, SingleFingerLockActivity.class, textInfo);
                 default:
                     break;
             }
@@ -101,7 +104,7 @@ public class EditActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         textInfo = textInfoDao.findById(textInfo.getId());
-        if(tempUnlock == LockType.TEMP_UNLOCK && textInfo.getLocked() == false){
+        if (tempUnlock == LockType.TEMP_UNLOCK && textInfo.getLocked() == false) {
             lockTitle.setTitle("未上锁");
         }
     }
@@ -177,7 +180,16 @@ public class EditActivity extends AppCompatActivity {
                 if (textInfo.getLocked()) {
                     switch (textInfo.getLockType()) {
                         case LockType.PASSWORD_LOCK:
-                            ActivityUtils.simpleIntentWithTextInfo(EditActivity.this, PasswordLoginActivity.class, textInfo);
+                            ActivityUtils.simpleIntentWithTextInfo(EditActivity.this,
+                                    PasswordLoginActivity.class,
+                                    textInfo);
+                            break;
+                        case LockType.FINGER_LOCK:
+                            ActivityUtils.simpleIntentWithTextInfo(EditActivity.this,
+                                    SingleFingerLockActivity.class,
+                                    textInfo,
+                                    "deleteLock",
+                                    true);
                             break;
                         default:
                             break;

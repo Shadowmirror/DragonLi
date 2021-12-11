@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.lock.widget.activity.FingerLoginActivity;
+import miao.kmirror.dragonli.singleActivity.SingleFingerLockActivity;
 import miao.kmirror.dragonli.singleActivity.SinglePasswordLockActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
@@ -50,7 +51,7 @@ public class SelectLockTypeFragment extends DialogFragment {
         toPassword = view.findViewById(R.id.single_lock_to_password);
 
         toFinger.setOnClickListener(v -> {
-            ActivityUtils.simpleIntentWithTextInfo(getContext(), FingerLoginActivity.class, textInfo);
+            ActivityUtils.simpleIntentWithTextInfo(getContext(), SingleFingerLockActivity.class, textInfo);
         });
         toImage.setOnClickListener(v -> {
             ToastUtils.toastShort(getContext(), "You click image");

@@ -15,6 +15,7 @@ import java.util.concurrent.Executor;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.MainActivity;
+import miao.kmirror.dragonli.bean.LockType;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
@@ -26,7 +27,7 @@ import miao.kmirror.dragonli.utils.ToastUtils;
 public class FingerLoginActivity extends AppCompatActivity {
     private boolean isLock;
     private TextInfo textInfo;
-    private TextInfoDao textInfoDao;
+    private TextInfoDao textInfoDao = new TextInfoDao();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +59,8 @@ public class FingerLoginActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                if (textInfo.getLocked() == false) {
-                    textInfo.setLocked(true);
-                    textInfo.setLockType(1);
-                    textInfoDao.update(textInfo);
-                    ToastUtils.toastShort(getApplicationContext(), textInfoDao.findById(textInfo.getId()).toString());
-                }else{
-                    ToastUtils.toastShort(FingerLoginActivity.this, "Authentication Succeeded!!");
-                    ActivityUtils.flagActivityClearTask(FingerLoginActivity.this, MainActivity.class);
-                }
-
+                ToastUtils.toastShort(FingerLoginActivity.this, "Authentication Succeeded!!");
+                ActivityUtils.flagActivityClearTask(FingerLoginActivity.this, MainActivity.class);
             }
 
             @Override

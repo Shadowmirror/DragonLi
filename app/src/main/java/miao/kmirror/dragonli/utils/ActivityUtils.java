@@ -36,4 +36,11 @@ public class ActivityUtils {
         intent.putExtra(name, value);
         thisContext.startActivity(intent);
     }
+
+    public static void simpleIntentWithTextInfo(Context thisContext, Class flagActivity, TextInfo textInfo, String name, boolean value) {
+        Intent intent = new Intent(thisContext, flagActivity);
+        intent.putExtra("textInfo", textInfo);
+        intent.putExtra(name, value);
+        thisContext.startActivity(intent);
+    }
 }
