@@ -27,7 +27,7 @@ public class TextInfoDao {
     }
 
     public List<TextInfo> findLikeTitleKey(String titleKey) {
-        List<TextInfo> textInfoList = LitePal.where("like = ?", "%" + titleKey + "%").find(TextInfo.class);
+        List<TextInfo> textInfoList = LitePal.where("title like ?", "%" + titleKey + "%").find(TextInfo.class);
         return textInfoList;
     }
 

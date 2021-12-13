@@ -1,8 +1,12 @@
 package miao.kmirror.dragonli.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
 
+    private DrawerLayout mDrawerLayout;
+
     private FloatingActionButton mBtnAdd;
 
     private List<TextInfo> mTextList;
@@ -62,9 +69,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // SqliteStudio
-        SQLiteStudioService.instance().start(this);
-
         initView();
         initData();
         initEvent();
@@ -75,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         refreshDataFromDb();
         setListLayout();
-        if(pauseTime != 0){
+        if (pauseTime != 0) {
             resumeTime = System.currentTimeMillis();
             // 离开应用时长
-            if((resumeTime - pauseTime) / 1000 >= 60){
+            if ((resumeTime - pauseTime) / 1000 >= 60) {
                 ToastUtils.toastShort(this, "离开本应用已 60 秒，本应用自动锁定");
                 ActivityUtils.flagActivityClearTask(this, LoginActivity.class);
             }
@@ -143,7 +147,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mRecyclerView = findViewById(R.id.text_list_view);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        }
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
     }
 
     public void to_page_add_text(View view) {
@@ -164,18 +184,23 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+//                Log.i(TAG, "onQueryTextChange: newText = " + newText);
                 mTextList = textInfoDao.findLikeTitleKey(newText);
                 mMyAdapter.refreshData(mTextList);
                 return true;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+//        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);
         switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
             case R.id.menu_linear:
                 setToLinearList();
                 currentListLayoutMode = MODE_LINEAR;
@@ -204,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent= new Intent(Intent.ACTION_MAIN);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);

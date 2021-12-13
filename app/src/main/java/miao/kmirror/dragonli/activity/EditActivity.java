@@ -28,6 +28,7 @@ import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.fragment.SelectLockTypeFragment;
 import miao.kmirror.dragonli.lock.widget.activity.PasswordLoginActivity;
 import miao.kmirror.dragonli.singleActivity.SingleFingerLockActivity;
+import miao.kmirror.dragonli.singleActivity.SingleImageLockActivity;
 import miao.kmirror.dragonli.singleActivity.SinglePasswordUnlockActivity;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.ActivityUtils;
@@ -67,6 +68,9 @@ public class EditActivity extends AppCompatActivity {
                 case LockType.FINGER_LOCK:
                     finish();
                     ActivityUtils.simpleIntentWithTextInfo(this, SingleFingerLockActivity.class, textInfo);
+                case LockType.IMAGE_LOCK:
+                    finish();
+                    ActivityUtils.simpleIntentWithTextInfo(this, SingleImageLockActivity.class, textInfo);
                 default:
                     break;
             }
@@ -187,6 +191,13 @@ public class EditActivity extends AppCompatActivity {
                         case LockType.FINGER_LOCK:
                             ActivityUtils.simpleIntentWithTextInfo(EditActivity.this,
                                     SingleFingerLockActivity.class,
+                                    textInfo,
+                                    "deleteLock",
+                                    true);
+                            break;
+                        case LockType.IMAGE_LOCK:
+                            ActivityUtils.simpleIntentWithTextInfo(EditActivity.this,
+                                    SingleImageLockActivity.class,
                                     textInfo,
                                     "deleteLock",
                                     true);

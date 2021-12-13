@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -30,7 +31,7 @@ public class ImageUnlockActivity extends AppCompatActivity implements ImageLockV
 
     public static final String TAG = "ImageUnlockActivity";
     private ImageLockView mImageLockView;
-    private TextView mTvCancel;
+    private Button mTvCancel;
     private TextView mTvTitle;
 
     @Override
@@ -42,9 +43,9 @@ public class ImageUnlockActivity extends AppCompatActivity implements ImageLockV
     }
 
     private void initView() {
-        mTvTitle = (TextView) findViewById(R.id.tv_title);
-        mImageLockView = (ImageLockView) findViewById(R.id.il_graphical_pw);
-        mTvCancel = (TextView) findViewById(R.id.bt_cancel);
+        mTvTitle = findViewById(R.id.tv_title);
+        mImageLockView = findViewById(R.id.il_graphical_pw);
+        mTvCancel = findViewById(R.id.bt_cancel);
 
         mTvCancel.setOnClickListener(v -> {
             onBackPressed();
@@ -57,10 +58,9 @@ public class ImageUnlockActivity extends AppCompatActivity implements ImageLockV
 
     @Override
     public void onGraphFinish(String password) {
-
-        if(MD5Utils.getMD5Code(password).equals(SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD))){
+        if (MD5Utils.getMD5Code(password).equals(SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD))) {
             ActivityUtils.flagActivityClearTask(this, MainActivity.class);
-        }else{
+        } else {
             mImageLockView.setMatch(false);
             ToastUtils.toastShort(ImageUnlockActivity.this, "密码错误");
             TimerTask task = new TimerTask() {

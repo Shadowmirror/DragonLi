@@ -19,6 +19,7 @@
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_password_login.xml" value="0.2046875" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_secret.xml" value="0.19010416666666666" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_single_finger_lock.xml" value="0.3770833333333333" />
+        <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_single_image_lock.xml" value="0.33" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_single_password_lock.xml" value="0.36614583333333334" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_single_password_unlock.xml" value="0.36614583333333334" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/fragment_edit_name.xml" value="0.18645833333333334" />
@@ -28,9 +29,12 @@
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/list_item_grid_layout.xml" value="0.20104166666666667" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/list_item_layout.xml" value="0.20153985507246377" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/list_item_single_lock_type_layout.xml" value="0.19010416666666666" />
+        <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/nav_header.xml" value="0.5" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/menu/menu_edit.xml" value="0.36614583333333334" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/menu/menu_main.xml" value="0.2046875" />
+        <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/menu/menu_nav.xml" value="0.19739583333333333" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/menu/menu_save.xml" value="0.36614583333333334" />
+        <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/menu/nav_header.xml" value="0.19739583333333333" />
       </map>
     </option>
   </component>

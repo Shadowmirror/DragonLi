@@ -15,6 +15,7 @@ import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.lock.widget.activity.FingerLoginActivity;
 import miao.kmirror.dragonli.singleActivity.SingleFingerLockActivity;
+import miao.kmirror.dragonli.singleActivity.SingleImageLockActivity;
 import miao.kmirror.dragonli.singleActivity.SinglePasswordLockActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
@@ -54,16 +55,16 @@ public class SelectLockTypeFragment extends DialogFragment {
             ActivityUtils.simpleIntentWithTextInfo(getContext(), SingleFingerLockActivity.class, textInfo);
         });
         toImage.setOnClickListener(v -> {
-            ToastUtils.toastShort(getContext(), "You click image");
+            ActivityUtils.simpleIntentWithTextInfo(getActivity(), SingleImageLockActivity.class, textInfo);
         });
         toPassword.setOnClickListener(v -> {
             ActivityUtils.simpleIntentWithTextInfo(getActivity(), SinglePasswordLockActivity.class, textInfo);
         });
         // Fetch arguments from bundle and set title
         // Show soft keyboard automatically and request focus to field
-        getDialog().getWindow()
-                .setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        getDialog()
+                .getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
     }
 }
