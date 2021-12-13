@@ -1,18 +1,13 @@
-package miao.kmirror.dragonli.lock.widget.activity;
+package miao.kmirror.dragonli.lock.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.LoginActivity;
-import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.lock.widget.ImageLockView;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.PasswordUtils;

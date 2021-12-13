@@ -2,28 +2,22 @@ package miao.kmirror.dragonli.singleActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.Lock;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.EditActivity;
-import miao.kmirror.dragonli.activity.LoginActivity;
 import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.bean.LockType;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.lock.widget.ImageLockView;
-import miao.kmirror.dragonli.lock.widget.activity.ImageUnlockActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
-import miao.kmirror.dragonli.utils.PasswordUtils;
-import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class SingleImageLockActivity extends AppCompatActivity implements ImageLockView.OnGraphChangedListener {

@@ -2,18 +2,17 @@ package miao.kmirror.dragonli.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
 import miao.kmirror.dragonli.R;
-import miao.kmirror.dragonli.lock.widget.activity.FingerLoginActivity;
-import miao.kmirror.dragonli.lock.widget.activity.ImageUnlockActivity;
-import miao.kmirror.dragonli.lock.widget.activity.PasswordLoginActivity;
+import miao.kmirror.dragonli.lock.activity.FingerLoginActivity;
+import miao.kmirror.dragonli.lock.activity.ImageUnlockActivity;
+import miao.kmirror.dragonli.lock.activity.PasswordLoginActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
+import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class LoginActivity extends AppCompatActivity{
     public static final String TAG = "LoginActivity";
@@ -22,8 +21,9 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         if(SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD) == "" && SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD) == ""){
-            Intent intent = new Intent(this, FirstUseActivity.class);
-            startActivity(intent);
+            // 第一次使用本应用
+            ActivityUtils.flagActivityClearTask(this, FirstUseActivity.class);
+            ToastUtils.toastShort(this, "第一次使用本应用，请使用设置应用密码！");
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);

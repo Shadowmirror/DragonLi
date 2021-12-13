@@ -15,6 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -28,6 +29,7 @@
                 style="@style/MyEditStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:maxLines="1" />
@@ -37,23 +39,117 @@
             style="@style/MyTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="内容：" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                style="@style/MyTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="启用随机密码：" />
+
+            <Switch
+                android:id="@+id/able_range"
+                style="@style/MySwitchStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/range_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    style="@style/MyTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="数字：" />
+
+                <Switch
+                    android:id="@+id/sw_enable_number"
+                    style="@style/MySwitchStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></Switch>
+
+                <TextView
+                    style="@style/MyTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="字母：" />
+
+                <Switch
+                    android:id="@+id/sw_enable_letter"
+                    style="@style/MySwitchStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></Switch>
+
+
+                <TextView
+                    style="@style/MyTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="符号：" />
+
+                <Switch
+                    android:id="@+id/sw_enable_symbol"
+                    style="@style/MySwitchStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></Switch>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="随机密码长度：" />
+
+                <SeekBar
+                    android:id="@+id/range_password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="100" />
+
+                <TextView
+                    android:id="@+id/password_length"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0" />
+            </LinearLayout>
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/et_content"
             style="@style/MyEditStyle"
+            android:padding="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:layout_marginTop="5dp"
             android:gravity="left"
-            android:minLines="30" />
-
-        <Button
-            android:id="@+id/bt_edit_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="test" />
+            android:inputType="textNoSuggestions|textMultiLine" />
 
 
     </LinearLayout>

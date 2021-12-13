@@ -1,7 +1,6 @@
-package miao.kmirror.dragonli.lock.widget.activity;
+package miao.kmirror.dragonli.lock.activity;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,12 +14,9 @@ import java.util.concurrent.Executor;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.MainActivity;
-import miao.kmirror.dragonli.bean.LockType;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
-import miao.kmirror.dragonli.utils.PasswordUtils;
-import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 

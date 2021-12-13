@@ -13,12 +13,10 @@ import androidx.fragment.app.DialogFragment;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.entity.TextInfo;
-import miao.kmirror.dragonli.lock.widget.activity.FingerLoginActivity;
 import miao.kmirror.dragonli.singleActivity.SingleFingerLockActivity;
 import miao.kmirror.dragonli.singleActivity.SingleImageLockActivity;
 import miao.kmirror.dragonli.singleActivity.SinglePasswordLockActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
-import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class SelectLockTypeFragment extends DialogFragment {
 

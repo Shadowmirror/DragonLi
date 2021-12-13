@@ -1,4 +1,4 @@
-package miao.kmirror.dragonli.lock.widget.activity;
+package miao.kmirror.dragonli.lock.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

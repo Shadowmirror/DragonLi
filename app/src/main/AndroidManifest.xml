@@ -31,27 +31,23 @@
             android:name=".singleActivity.SinglePasswordLockActivity"
             android:exported="false" /> <!-- 登录模块 -->
         <activity android:name=".activity.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
-            android:name=".lock.widget.activity.PasswordLoginActivity"
+            android:name=".lock.activity.PasswordLoginActivity"
             android:exported="true"
             android:label="密码登录"
             android:parentActivityName=".activity.LoginActivity" />
         <activity
-            android:name=".lock.widget.activity.FingerLoginActivity"
+            android:name=".lock.activity.FingerLoginActivity"
             android:label="指纹登录"
             android:parentActivityName=".activity.LoginActivity" />
         <activity
-            android:name=".lock.widget.activity.ImageUnlockActivity"
+            android:name=".lock.activity.ImageUnlockActivity"
             android:label="手势登录"
             android:parentActivityName=".activity.LoginActivity" /> <!-- 设置密码模块 -->
         <activity
-            android:name=".lock.widget.activity.ImageLockActivity"
+            android:name=".lock.activity.ImageLockActivity"
             android:exported="false" />
         <activity
             android:name=".activity.FirstUseActivity"
@@ -60,7 +56,15 @@
             android:name=".activity.MainActivity"
             android:exported="true"
             android:label="主页面"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".activity.EditActivity"
             android:label="编辑记事"

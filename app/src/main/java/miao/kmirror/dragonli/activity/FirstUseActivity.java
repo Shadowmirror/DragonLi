@@ -8,8 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import miao.kmirror.dragonli.R;
-import miao.kmirror.dragonli.lock.widget.activity.ImageLockActivity;
-import miao.kmirror.dragonli.lock.widget.activity.PasswordLoginActivity;
+import miao.kmirror.dragonli.lock.activity.ImageLockActivity;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;

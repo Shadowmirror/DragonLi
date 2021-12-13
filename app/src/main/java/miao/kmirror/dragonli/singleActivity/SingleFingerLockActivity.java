@@ -16,7 +16,6 @@ import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.bean.LockType;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
-import miao.kmirror.dragonli.lock.widget.activity.FingerLoginActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
