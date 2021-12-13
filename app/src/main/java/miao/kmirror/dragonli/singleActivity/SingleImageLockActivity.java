@@ -71,7 +71,7 @@ public class SingleImageLockActivity extends AppCompatActivity implements ImageL
             // 加锁
             if (isMatch == false) {
                 imagePassword = password;
-                mTvTitle.setText("请再次绘制请再次绘制");
+                mTvTitle.setText("请再次绘制");
                 mImageLockView.resetGraphicalPassword();
                 isMatch = true;
             } else {

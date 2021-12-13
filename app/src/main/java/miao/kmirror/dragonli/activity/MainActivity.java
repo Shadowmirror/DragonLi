@@ -29,6 +29,7 @@ import miao.kmirror.dragonli.adapter.MyAdapter;
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.navFunction.ChangeAppImage;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
@@ -160,10 +161,22 @@ public class MainActivity extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_setImage:
+                        ActivityUtils.simpleIntent(MainActivity.this, ChangeAppImage.class);
+                        break;
+                    case R.id.nav_setPassword:
+                        ToastUtils.toastShort(MainActivity.this, "Click SetPassword!!");
+                        break;
+                    default:
+                        break;
+                }
                 mDrawerLayout.closeDrawers();
                 return true;
             }
+
         });
+
     }
 
     public void to_page_add_text(View view) {
