@@ -42,7 +42,7 @@ public class PasswordLoginActivity extends AppCompatActivity{
         BtVerifyPassword = findViewById(R.id.bt_verify_password);
 
         BtVerifyPassword.setOnClickListener(v -> {
-            if(textInfo.getId() > 0){
+            if(textInfo != null){
                 unlockPassword();
             }else{
                 verifyPassword();

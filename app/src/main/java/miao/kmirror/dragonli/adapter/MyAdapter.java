@@ -90,7 +90,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.mTvContent.setText(AESEncryptUtils.decrypt(textContent.getContent(), AESEncryptUtils.TEST_PASS));
         }else{
             holder.mTvContent.setText("该条数据已加密！");
-            holder.itemView.setBackgroundColor(Color.rgb(0,255,0));
         }
         holder.mTvTime.setText(text.getUpdateDate());
         // 设置单击响应事件

@@ -46,7 +46,7 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
         mImageLockView = findViewById(R.id.il_graphical_pw);
         mTvCancel = findViewById(R.id.bt_cancel);
         mTvCancel.setOnClickListener(v -> {
-            onBackPressed();
+            finish();
         });
         mImageLockView.setOnGraphChangedListener(this);
         mImageLockView.setAlpha(70);
@@ -59,7 +59,7 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
         String tempPassword = MD5Utils.getMD5Code(password);
         if(!isReset){
             // 验证应用手势锁
-            mTvTitle.setText("请绘制应用手势锁");
+            mTvTitle.setText("请绘制应用原手势锁");
             String localPassword = SpfUtils.getString(this, "imagePassword");
             if(localPassword.equals(tempPassword)){
                 isReset = true;

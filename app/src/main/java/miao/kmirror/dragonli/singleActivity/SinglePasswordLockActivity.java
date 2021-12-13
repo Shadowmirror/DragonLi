@@ -35,7 +35,6 @@ public class SinglePasswordLockActivity extends AppCompatActivity {
                 textInfo.setLocked(true);
                 textInfo.setLockType(LockType.PASSWORD_LOCK);
                 textInfoDao.update(textInfo);
-                ToastUtils.toastShort(this, textInfoDao.findById(textInfo.getId()).toString());
                 ActivityUtils.flagActivityClearTask(this, MainActivity.class);
             } else {
                 ToastUtils.toastShort(this, "两次密码不一致请重新输入！！！");

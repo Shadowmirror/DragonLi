@@ -30,6 +30,7 @@ import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.navFunction.ChangeAppImage;
+import miao.kmirror.dragonli.navFunction.ChangeAppPassword;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                         ActivityUtils.simpleIntent(MainActivity.this, ChangeAppImage.class);
                         break;
                     case R.id.nav_setPassword:
-                        ToastUtils.toastShort(MainActivity.this, "Click SetPassword!!");
+                        ActivityUtils.simpleIntent(MainActivity.this, ChangeAppPassword.class);
                         break;
                     default:
                         break;
