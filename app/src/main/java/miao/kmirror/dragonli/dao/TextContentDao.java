@@ -6,7 +6,7 @@ import java.util.List;
 
 import miao.kmirror.dragonli.entity.TextContent;
 
-public class TextContentDao {
+public class  TextContentDao {
 
     private TextContent textContent;
 

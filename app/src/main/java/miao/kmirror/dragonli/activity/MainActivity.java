@@ -34,7 +34,6 @@ import miao.kmirror.dragonli.navFunction.ChangeAppPassword;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
-import pl.com.salsoft.sqlitestudioremote.SQLiteStudioService;
 
 public class MainActivity extends AppCompatActivity {
 
