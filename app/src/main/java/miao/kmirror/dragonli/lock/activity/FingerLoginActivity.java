@@ -31,16 +31,17 @@ public class FingerLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finger_login);
         Button btVerifyFinger = findViewById(R.id.bt_verify_finger);
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("请验证指纹")
+                .setNegativeButtonText("取消")
+                .build();
         btVerifyFinger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                        .setTitle("请验证指纹")
-                        .setNegativeButtonText("取消")
-                        .build();
                 getPrompt().authenticate(promptInfo);
             }
         });
+        getPrompt().authenticate(promptInfo);
     }
 
     private BiometricPrompt getPrompt() {

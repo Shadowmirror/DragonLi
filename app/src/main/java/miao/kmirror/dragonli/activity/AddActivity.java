@@ -12,7 +12,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import org.litepal.LitePal;
 
@@ -25,6 +31,7 @@ import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
+import miao.kmirror.dragonli.utils.RangePasswordUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class AddActivity extends AppCompatActivity {
@@ -34,6 +41,21 @@ public class AddActivity extends AppCompatActivity {
     private boolean isChange = false;
     private EditText etContent;
     private int skipOne = 1;
+
+    /**
+     * 显示随机密码的长度
+     * */
+    private TextView password_length;
+
+    /**
+     *  这三个分别代表时候含有数字、字母、符号
+     *  1 表示含有
+     *  2 表示不含有
+     *  默认是仅数字
+     * */
+    private int haveNumber = 1;
+    private int haveLetter = 0;
+    private int haveSymbol = 0;
 
     private TextContentDao textContentDao = new TextContentDao();
     private TextInfoDao textInfoDao = new TextInfoDao();
@@ -63,6 +85,89 @@ public class AddActivity extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+
+        /**
+         * 随机密码功能
+         * */
+        SeekBar seekBar = findViewById(R.id.range_password);
+        password_length = findViewById(R.id.password_length);
+        LinearLayout rangeView = findViewById(R.id.range_view);
+        rangeView.setVisibility(View.GONE);
+
+        Switch ableRange = findViewById(R.id.able_range);
+        ableRange.setChecked(false);
+        ableRange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked){
+                    rangeView.setVisibility(View.GONE);
+                }else{
+                    rangeView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        Switch swEnableNumber = findViewById(R.id.sw_enable_number);
+        Switch swEnableLetter = findViewById(R.id.sw_enable_letter);
+        Switch swEnableSymbol = findViewById(R.id.sw_enable_symbol);
+        swEnableNumber.setChecked(true);
+        swEnableNumber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    haveNumber = 1;
+                }else{
+                    haveNumber = 0;
+                }
+            }
+        });
+        swEnableLetter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    haveLetter = 1;
+                }else{
+                    haveLetter = 0;
+                }
+            }
+        });
+        swEnableSymbol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    haveSymbol = 1;
+                }else{
+                    haveSymbol = 0;
+                }
+            }
+        });
+
+
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // 拖动条进度改变时调用
+                String rangeTypeStr = "" + haveSymbol + haveLetter + haveNumber;
+                int rangeType = Integer.parseInt(rangeTypeStr, 2);
+                if(rangeType == 0){
+                    ToastUtils.toastShort(AddActivity.this, "至少选择一种方式生成随机密码");
+                }else{
+                    password_length.setText("" + progress);
+                    etContent.setText(RangePasswordUtils.rangePassword(rangeType, progress));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // 拖动条开始时调用
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // 拖动条结束时调用
             }
         });
     }

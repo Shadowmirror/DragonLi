@@ -94,9 +94,11 @@ public class EditActivity extends AppCompatActivity {
                 case LockType.FINGER_LOCK:
                     finish();
                     ActivityUtils.simpleIntentWithTextInfo(this, SingleFingerLockActivity.class, textInfo);
+                    break;
                 case LockType.IMAGE_LOCK:
                     finish();
                     ActivityUtils.simpleIntentWithTextInfo(this, SingleImageLockActivity.class, textInfo);
+                    break;
                 default:
                     break;
             }

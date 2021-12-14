@@ -2,6 +2,10 @@ package miao.kmirror.dragonli.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -38,6 +42,14 @@ public class LoginActivity extends AppCompatActivity{
         });
         image.setOnClickListener(v -> {
             ActivityUtils.simpleIntent(this, ImageUnlockActivity.class);
+        });
+
+
+        Button test = findViewById(R.id.test);
+        test.setOnClickListener(v -> {
+            PackageManager packageManager = this.getPackageManager();
+            Intent intent= packageManager.getLaunchIntentForPackage("com.tencent.mobileqq");
+            startActivity(intent);
         });
     }
 }
