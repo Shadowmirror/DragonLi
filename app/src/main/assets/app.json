@@ -1,0 +1,14 @@
+[
+  {
+    "appName": "淘宝",
+    "appPackage": "com.taobao.taobao"
+  },
+  {
+    "appName": "QQ",
+    "appPackage": "com.tencent.mobileqq"
+  },
+  {
+    "appName": "京东",
+    "appPackage": "com.jingdong.app.mall"
+  }
+]
