@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.entity.AppPackage;
 import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.entity.WebInfo;
 
 public class ActivityUtils {
     public static void flagActivityClearTask(Context thisContext, Class flagActivity) {
@@ -52,10 +54,16 @@ public class ActivityUtils {
             PackageManager packageManager = thisContext.getPackageManager();
             Intent intent = packageManager.getLaunchIntentForPackage(currentApp.getAppPackageName());
             thisContext.startActivity(intent);
-        }else{
+        } else {
             ToastUtils.toastShort(thisContext, "没有安装" + currentApp.getAppName());
         }
 
+    }
+
+    public static void goWeb(Context context, WebInfo currentWeb) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://" + currentWeb.getWebLink()));
+        context.startActivity(intent);
     }
 
     private static boolean checkAppInstalled(Context context, String pkgName) {

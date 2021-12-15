@@ -1,31 +1,24 @@
 package miao.kmirror.dragonli.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import miao.kmirror.dragonli.R;
-import miao.kmirror.dragonli.activity.TestActivity;
 import miao.kmirror.dragonli.entity.AppPackage;
-import miao.kmirror.dragonli.utils.ToastUtils;
 
 public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<AppPackage> mAppPackages;
     private LayoutInflater inflater;
-    private AppItemClickListener appItemClickListener;
+    private SkipItemClickListener skipItemClickListener;
 
     public AppAdapter(Context context, List<AppPackage> mAppPackages) {
         inflater = LayoutInflater.from(context);
@@ -86,15 +79,15 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(appItemClickListener != null){
-                        appItemClickListener.onItemClick(v, getAbsoluteAdapterPosition());
+                    if(skipItemClickListener != null){
+                        skipItemClickListener.onItemClick(v, getAbsoluteAdapterPosition());
                     }
                 }
             });
         }
     }
 
-    public void setOnItemClickListener(AppItemClickListener listener){
-        appItemClickListener = listener;
+    public void setOnItemClickListener(SkipItemClickListener listener){
+        skipItemClickListener = listener;
     }
 }

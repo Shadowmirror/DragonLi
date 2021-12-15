@@ -37,11 +37,6 @@
             android:exported="false" /> <!-- 登录模块 -->
         <activity android:name=".activity.LoginActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".lock.activity.PasswordLoginActivity"
@@ -74,7 +69,15 @@
         <activity
             android:name=".activity.AddActivity"
             android:label="添加记事"
-            android:parentActivityName=".activity.MainActivity" />
+            android:parentActivityName=".activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
     </application>
 
 </manifest>

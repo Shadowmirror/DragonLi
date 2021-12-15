@@ -35,13 +35,6 @@
                 android:maxLines="1" />
         </LinearLayout>
 
-        <TextView
-            style="@style/MyTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="内容：" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,6 +54,9 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
+
+
+        <!-- 随机密码功能模块视图 -->
         <LinearLayout
             android:id="@+id/range_view"
             android:layout_width="match_parent"
@@ -140,16 +136,22 @@
             </LinearLayout>
         </LinearLayout>
 
+        <TextView
+            style="@style/MyTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="内容：" />
 
         <EditText
             android:id="@+id/et_content"
             style="@style/MyEditStyle"
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_marginTop="5dp"
             android:gravity="left"
-            android:inputType="textNoSuggestions|textMultiLine" />
+            android:inputType="textNoSuggestions|textMultiLine"
+            android:padding="10dp" />
 
 
     </LinearLayout>

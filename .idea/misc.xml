@@ -8,7 +8,7 @@
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.22083333333333333" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22083333333333333" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout-fragment/fragment_edit_name.xml" value="0.18645833333333334" />
-        <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_add.xml" value="0.20153985507246377" />
+        <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_add.xml" value="0.33" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_change_app_image.xml" value="0.2046875" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_change_app_password.xml" value="0.33" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/activity_edit.xml" value="0.33" />
@@ -37,6 +37,7 @@
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/list_item_grid_layout.xml" value="0.20104166666666667" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/list_item_layout.xml" value="0.20153985507246377" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/list_item_single_lock_type_layout.xml" value="0.19010416666666666" />
+        <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/list_item_web_view.xml" value="0.33469202898550726" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/nav_header.xml" value="0.5" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/layout/popupwindow.xml" value="0.178125" />
         <entry key="..\:/APPData/AndroidProject/DragonLi/app/src/main/res/menu/menu_edit.xml" value="0.36614583333333334" />

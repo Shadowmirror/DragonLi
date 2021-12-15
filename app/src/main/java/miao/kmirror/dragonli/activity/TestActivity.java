@@ -4,50 +4,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.JsonReader;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.adapter.AppAdapter;
-import miao.kmirror.dragonli.adapter.AppItemClickListener;
+import miao.kmirror.dragonli.adapter.SkipItemClickListener;
 import miao.kmirror.dragonli.dao.AppPackageDao;
 import miao.kmirror.dragonli.dao.WebInfoDao;
 import miao.kmirror.dragonli.entity.AppPackage;
-import miao.kmirror.dragonli.entity.WebInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
-import miao.kmirror.dragonli.utils.JsonUtils;
-import miao.kmirror.dragonli.utils.ToastUtils;
 
-public class TestActivity extends AppCompatActivity implements AppItemClickListener {
+public class TestActivity extends AppCompatActivity implements SkipItemClickListener {
 
     public static final String TAG = "TextActivity";
 
@@ -100,7 +79,7 @@ public class TestActivity extends AppCompatActivity implements AppItemClickListe
     private void showPopupWindow() {
         View view = LayoutInflater.from(TestActivity.this).inflate(R.layout.popupwindow, null);
 
-        mRecyclerView = view.findViewById(R.id.test_recyclerView);
+        mRecyclerView = view.findViewById(R.id.skip_recyclerView);
         popupWindow = new PopupWindow(TestActivity.this);
         popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);

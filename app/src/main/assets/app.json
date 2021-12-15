@@ -1,14 +1,18 @@
 [
   {
+    "appName": "无",
+    "appPackageName": "null"
+  },
+  {
     "appName": "淘宝",
-    "appPackage": "com.taobao.taobao"
+    "appPackageName": "com.taobao.taobao"
   },
   {
     "appName": "QQ",
-    "appPackage": "com.tencent.mobileqq"
+    "appPackageName": "com.tencent.mobileqq"
   },
   {
     "appName": "京东",
-    "appPackage": "com.jingdong.app.mall"
+    "appPackageName": "com.jingdong.app.mall"
   }
 ]

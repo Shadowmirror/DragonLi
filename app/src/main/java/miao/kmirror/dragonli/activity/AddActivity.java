@@ -3,6 +3,8 @@ package miao.kmirror.dragonli.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,31 +12,47 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import org.litepal.LitePal;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import miao.kmirror.dragonli.R;
+import miao.kmirror.dragonli.adapter.AppAdapter;
+import miao.kmirror.dragonli.adapter.SkipItemClickListener;
+import miao.kmirror.dragonli.adapter.WebAdapter;
+import miao.kmirror.dragonli.dao.AppPackageDao;
 import miao.kmirror.dragonli.dao.TextContentDao;
 import miao.kmirror.dragonli.dao.TextInfoDao;
+import miao.kmirror.dragonli.dao.WebInfoDao;
+import miao.kmirror.dragonli.entity.AppPackage;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.entity.WebInfo;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
+import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.RangePasswordUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity implements SkipItemClickListener {
 
     public static final String TAG = "AddActivity";
     private EditText etTitle;
@@ -44,7 +62,7 @@ public class AddActivity extends AppCompatActivity {
 
     /**
      * 显示随机密码的长度
-     * */
+     */
     private TextView password_length;
 
     /**
@@ -56,6 +74,7 @@ public class AddActivity extends AppCompatActivity {
      * 2 表示不含有
      * 默认是仅数字
      */
+    Switch ableRange;
     private int haveNumber = 1;
     private int haveLetter = 0;
     private int haveSymbol = 0;
@@ -64,8 +83,33 @@ public class AddActivity extends AppCompatActivity {
     Switch swEnableSymbol;
     SeekBar seekBar;
 
+    /**
+     * 数据库操作
+     */
     private TextContentDao textContentDao = new TextContentDao();
     private TextInfoDao textInfoDao = new TextInfoDao();
+    private AppPackageDao appPackageDao = new AppPackageDao();
+    private WebInfoDao webInfoDao = new WebInfoDao();
+
+
+    /**
+     * App 和 Web 页跳转
+     */
+    private AppPackage currentApp;
+    private WebInfo currentWeb;
+    private int appOrWeb = 0;
+    private Button copyAndSkip;
+    private TextView tvAppOrWebName;
+    private LinearLayout skipList;
+    private ImageView imagePopup;
+    private List<AppPackage> appPackages;
+    private List<WebInfo> webInfoList;
+    private WebAdapter mWebAdapter;
+    private AppAdapter mAppAdapter;
+    private RecyclerView mRecyclerView;
+    public PopupWindow popupWindow;
+    private Spinner spSelect;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +130,11 @@ public class AddActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(skipOne++ != 1 && count > 0){
+                if (skipOne++ != 1 && count > 0) {
                     isChange = true;
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -98,13 +143,119 @@ public class AddActivity extends AppCompatActivity {
         /**
          * 随机密码功能
          * */
+        initRange();
+
+
         /**
-         * 随机密码功能开始
+         * 应用或网站跳转功能
          * */
+        initAppOrWebSkip();
+
+
+        /**
+         * 加载数据
+         * */
+        initData();
+
+    }
+
+    public void initData() {
+
+        appPackages = new ArrayList<>();
+        appPackages = appPackageDao.findAll();
+        currentApp = appPackages.get(0);
+        webInfoList = new ArrayList<>();
+        webInfoList = webInfoDao.findAll();
+        currentWeb = webInfoList.get(0);
+
+        if(appOrWeb == 0){
+            tvAppOrWebName.setText(currentApp.getAppName());
+        }else if(appOrWeb == 1){
+            tvAppOrWebName.setText(currentWeb.getWebName());
+        }
+
+    }
+
+    /**
+     * 应用或网站跳转功能
+     */
+    public void initAppOrWebSkip() {
+        spSelect = findViewById(R.id.sp_select);
+        skipList = findViewById(R.id.skip_list);
+        tvAppOrWebName = findViewById(R.id.tv_app_or_web_name);
+        imagePopup = findViewById(R.id.image_popup);
+        copyAndSkip = findViewById(R.id.copy_and_skip);
+
+        spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                appOrWeb = position;
+                if(appOrWeb == 0){
+                    currentApp = appPackages.get(0);
+                    tvAppOrWebName.setText(currentApp.getAppName());
+                }else if(appOrWeb == 1){
+                    currentWeb = webInfoList.get(0);
+                    tvAppOrWebName.setText(currentWeb.getWebName());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        skipList.setOnClickListener(v -> {
+            showPopupWindow();
+        });
+        copyAndSkip.setOnClickListener(v -> {
+            if(appOrWeb == 0){
+                ActivityUtils.goApp(this, currentApp);
+            }else if(appOrWeb == 1){
+                ActivityUtils.goWeb(this, currentWeb);
+            }
+        });
+    }
+
+    /**
+     * 列表弹窗功能
+     */
+    private void showPopupWindow() {
+        View view = LayoutInflater.from(this).inflate(R.layout.popupwindow, null);
+        mRecyclerView = view.findViewById(R.id.skip_recyclerView);
+        popupWindow = new PopupWindow(this);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(view);
+        popupWindow.setFocusable(true);
+        initPopupData();
+        popupWindow.showAsDropDown(imagePopup);
+    }
+
+    /**
+     * 加载 PopupWindow 需要的数据
+     */
+    private void initPopupData() {
+        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        if(appOrWeb == 0){
+            mAppAdapter = new AppAdapter(this, appPackages);
+            mAppAdapter.setOnItemClickListener(this);
+            mRecyclerView.setAdapter(mAppAdapter);
+        } else if(appOrWeb == 1){
+            mWebAdapter = new WebAdapter(this, webInfoList);
+            mWebAdapter.setOnItemClickListener(this);
+            mRecyclerView.setAdapter(mWebAdapter);
+        }
+    }
+
+    /**
+     * 加载随机密码生成功能
+     */
+    public void initRange() {
         password_length = findViewById(R.id.password_length);
         LinearLayout rangeView = findViewById(R.id.range_view);
         rangeView.setVisibility(View.GONE);
-        Switch ableRange = findViewById(R.id.able_range);
+        ableRange = findViewById(R.id.able_range);
         ableRange.setChecked(false);
         ableRange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -113,14 +264,9 @@ public class AddActivity extends AppCompatActivity {
                     rangeView.setVisibility(View.GONE);
                 } else {
                     rangeView.setVisibility(View.VISIBLE);
-                    initRange();
                 }
             }
         });
-    }
-
-    public void initRange() {
-
         swEnableNumber = findViewById(R.id.sw_enable_number);
         swEnableLetter = findViewById(R.id.sw_enable_letter);
         swEnableSymbol = findViewById(R.id.sw_enable_symbol);
@@ -184,7 +330,7 @@ public class AddActivity extends AppCompatActivity {
 
     /**
      * 返回按钮的是否保存事件
-     * */
+     */
     public void changeSave() {
         if (isChange) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(AddActivity.this);
@@ -214,7 +360,7 @@ public class AddActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             changeSave();
-            if(!isChange){
+            if (!isChange) {
                 return super.onOptionsItemSelected(item);
             }
         }
@@ -227,7 +373,7 @@ public class AddActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         changeSave();
-        if(!isChange){
+        if (!isChange) {
             super.onBackPressed();
         }
     }
@@ -252,7 +398,7 @@ public class AddActivity extends AppCompatActivity {
     public void add_text() {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
-        if(TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             ToastUtils.toastShort(this, "标题不能为空");
             return;
         }
@@ -263,11 +409,11 @@ public class AddActivity extends AppCompatActivity {
         textInfo.setUpdateDate(DateUtils.getCurrentTimeFormat());
         textContent.setContent(AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS));
         // 开启事务操作
-        try{
+        try {
             LitePal.beginTransaction();
             boolean result1 = textInfoDao.save(textInfo);
             boolean result2 = textContentDao.save(textContent);
-            if(result1 && result2){
+            if (result1 && result2) {
                 LitePal.setTransactionSuccessful();
                 ToastUtils.toastShort(this, "添加成功！");
                 this.finish();
@@ -279,4 +425,17 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onItemClick(View v, int position) {
+        if(appOrWeb == 0){
+            AppPackage appPackage = appPackages.get(position);
+            currentApp = appPackage;
+            tvAppOrWebName.setText(appPackage.getAppName());
+        }else if(appOrWeb == 1){
+            WebInfo webInfo = webInfoList.get(position);
+            currentWeb = webInfo;
+            tvAppOrWebName.setText(webInfo.getWebName());
+        }
+        popupWindow.dismiss();
+    }
 }
