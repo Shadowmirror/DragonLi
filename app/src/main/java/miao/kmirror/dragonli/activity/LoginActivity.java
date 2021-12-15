@@ -43,13 +43,5 @@ public class LoginActivity extends AppCompatActivity{
         image.setOnClickListener(v -> {
             ActivityUtils.simpleIntent(this, ImageUnlockActivity.class);
         });
-
-
-        Button test = findViewById(R.id.test);
-        test.setOnClickListener(v -> {
-            PackageManager packageManager = this.getPackageManager();
-            Intent intent= packageManager.getLaunchIntentForPackage("com.tencent.mobileqq");
-            startActivity(intent);
-        });
     }
 }

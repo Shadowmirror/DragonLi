@@ -1,9 +1,12 @@
 package miao.kmirror.dragonli.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,8 +24,11 @@ import miao.kmirror.dragonli.utils.ToastUtils;
 public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<AppPackage> mAppPackages;
+    private LayoutInflater inflater;
+    private AppItemClickListener appItemClickListener;
 
-    public AppAdapter(List<AppPackage> mAppPackages) {
+    public AppAdapter(Context context, List<AppPackage> mAppPackages) {
+        inflater = LayoutInflater.from(context);
         this.mAppPackages = mAppPackages;
     }
 
@@ -30,8 +36,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = View.inflate(parent.getContext(), R.layout.list_item_app_view, parent);
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_app_view, parent, false);
+        View view = inflater.inflate(R.layout.list_item_app_view, parent, false);
         AppViewHolder holder = new AppViewHolder(view);
         return holder;
     }
@@ -49,15 +54,12 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void bindAppViewHolder(AppViewHolder holder, int position) {
         AppPackage appPackage = mAppPackages.get(position);
-        System.out.println(appPackage.toString());
         holder.tvAppPackage.setText(appPackage.getAppPackageName());
         holder.tvAppName.setText(appPackage.getAppName());
 
-        holder.rlAppContainer.setOnClickListener(v -> {
-            
-            Log.i("TestActivity", "bindAppViewHolder:  You Click me");
-
-        });
+//        holder.rlAppContainer.setOnClickListener(v -> {
+//            popupWindow.dismiss();
+//        });
     }
 
     public void refreshData(List<AppPackage> appPackages) {
@@ -71,6 +73,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class AppViewHolder extends RecyclerView.ViewHolder {
+
         TextView tvAppName;
         TextView tvAppPackage;
         ViewGroup rlAppContainer;
@@ -80,6 +83,18 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.tvAppName = itemView.findViewById(R.id.tv_app_name);
             this.tvAppPackage = itemView.findViewById(R.id.tv_app_package);
             this.rlAppContainer = itemView.findViewById(R.id.rl_item_app_container);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(appItemClickListener != null){
+                        appItemClickListener.onItemClick(v, getAbsoluteAdapterPosition());
+                    }
+                }
+            });
         }
+    }
+
+    public void setOnItemClickListener(AppItemClickListener listener){
+        appItemClickListener = listener;
     }
 }

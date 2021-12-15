@@ -48,14 +48,21 @@ public class AddActivity extends AppCompatActivity {
     private TextView password_length;
 
     /**
-     *  这三个分别代表时候含有数字、字母、符号
-     *  1 表示含有
-     *  2 表示不含有
-     *  默认是仅数字
+     * 随机密码功能
      * */
+    /**
+     * 这三个分别代表时候含有数字、字母、符号
+     * 1 表示含有
+     * 2 表示不含有
+     * 默认是仅数字
+     */
     private int haveNumber = 1;
     private int haveLetter = 0;
     private int haveSymbol = 0;
+    Switch swEnableNumber;
+    Switch swEnableLetter;
+    Switch swEnableSymbol;
+    SeekBar seekBar;
 
     private TextContentDao textContentDao = new TextContentDao();
     private TextInfoDao textInfoDao = new TextInfoDao();
@@ -91,33 +98,40 @@ public class AddActivity extends AppCompatActivity {
         /**
          * 随机密码功能
          * */
-        SeekBar seekBar = findViewById(R.id.range_password);
+        /**
+         * 随机密码功能开始
+         * */
         password_length = findViewById(R.id.password_length);
         LinearLayout rangeView = findViewById(R.id.range_view);
         rangeView.setVisibility(View.GONE);
-
         Switch ableRange = findViewById(R.id.able_range);
         ableRange.setChecked(false);
         ableRange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked){
+                if (!isChecked) {
                     rangeView.setVisibility(View.GONE);
-                }else{
+                } else {
                     rangeView.setVisibility(View.VISIBLE);
+                    initRange();
                 }
             }
         });
-        Switch swEnableNumber = findViewById(R.id.sw_enable_number);
-        Switch swEnableLetter = findViewById(R.id.sw_enable_letter);
-        Switch swEnableSymbol = findViewById(R.id.sw_enable_symbol);
+    }
+
+    public void initRange() {
+
+        swEnableNumber = findViewById(R.id.sw_enable_number);
+        swEnableLetter = findViewById(R.id.sw_enable_letter);
+        swEnableSymbol = findViewById(R.id.sw_enable_symbol);
+        seekBar = findViewById(R.id.range_password);
         swEnableNumber.setChecked(true);
         swEnableNumber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     haveNumber = 1;
-                }else{
+                } else {
                     haveNumber = 0;
                 }
             }
@@ -125,9 +139,9 @@ public class AddActivity extends AppCompatActivity {
         swEnableLetter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     haveLetter = 1;
-                }else{
+                } else {
                     haveLetter = 0;
                 }
             }
@@ -135,23 +149,22 @@ public class AddActivity extends AppCompatActivity {
         swEnableSymbol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     haveSymbol = 1;
-                }else{
+                } else {
                     haveSymbol = 0;
                 }
             }
         });
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // 拖动条进度改变时调用
                 String rangeTypeStr = "" + haveSymbol + haveLetter + haveNumber;
                 int rangeType = Integer.parseInt(rangeTypeStr, 2);
-                if(rangeType == 0){
+                if (rangeType == 0) {
                     ToastUtils.toastShort(AddActivity.this, "至少选择一种方式生成随机密码");
-                }else{
+                } else {
                     password_length.setText("" + progress);
                     etContent.setText(RangePasswordUtils.rangePassword(rangeType, progress));
                 }

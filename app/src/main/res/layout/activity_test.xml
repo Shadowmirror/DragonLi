@@ -7,12 +7,57 @@
     android:orientation="vertical"
     tools:context=".activity.TestActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="去主页：" />
+
+        <LinearLayout
+            android:id="@+id/test_show_info"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/test_app_name"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="淘宝" />
+
+            <TextView
+                android:id="@+id/test_app_package"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="com.taobao.taobao" />
+
+            <ImageView
+                android:id="@+id/test_popup"
+                android:layout_width="20dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/popup" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
     <Button
-        android:id="@+id/test"
+        android:id="@+id/test_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="测试PopupWindow" />
+        android:layout_gravity="center"
+        android:text="去这里" />
 
+    <!--    <Button-->
+    <!--        android:id="@+id/test"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="测试PopupWindow" />-->
 
 
     <!--    <LinearLayout-->
