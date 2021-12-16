@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -222,6 +225,9 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
             showPopupWindow();
         });
         copyAndSkip.setOnClickListener(v -> {
+            ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData label = ClipData.newPlainText("Label", etContent.getText());
+            cm.setPrimaryClip(label);
             if (appOrWeb == 0) {
                 ActivityUtils.goApp(this, currentApp);
             } else if (appOrWeb == 1) {
