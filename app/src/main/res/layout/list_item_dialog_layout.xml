@@ -2,20 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cardBtLittleGray"
+    android:orientation="vertical">
 
-    <TextView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:id="@+id/tv_delete"
-        android:text="删除"
-        style="@style/MyTextStyle"
-        />
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="10dp">
+        <TextView
+            android:id="@+id/tv_delete"
+            style="@style/MyTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="删除" />
+    </androidx.cardview.widget.CardView>
 
-    <TextView
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:id="@+id/tv_edit"
-        android:text="编辑"
-        style="@style/MyTextStyle"
-        />
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="10dp">
+        <TextView
+            android:id="@+id/tv_edit"
+            style="@style/MyTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="编辑" />
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -22,4 +22,5 @@
     
     <color name="grayWhite">#E0E0E0</color>
     <color name="cardBgColor">#DEFFF5</color>
+    <color name="cardBtLittleGray">#F4F4F4</color>
 </resources>

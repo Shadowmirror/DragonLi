@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -117,6 +118,11 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
     private TextView dialogTitle;
     private EditText etSkipName;
     private EditText etSkipLink;
+    /**
+     * 用于删除网站和应用条目的临时变量
+     */
+    private WebInfo tempWebInfo;
+    private AppPackage tempAppPackage;
 
 
     @Override
@@ -549,13 +555,70 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
         popupWindow.dismiss();
     }
 
+    /**
+     * 应用或网站条目删除
+     */
     @Override
     public void onItemLongClick(View v, int position) {
+
         if (appOrWeb == 0) {
-            ToastUtils.toastShort(this, "你长按了应用区");
+            tempAppPackage = appPackages.get(position);
         } else if (appOrWeb == 1) {
-            ToastUtils.toastShort(this, "你长按了网站区");
+            tempWebInfo = webInfoList.get(position);
         }
+        // 弹出弹窗
+        Dialog dialog = new Dialog(this, android.R.style.ThemeOverlay_Material_Dialog_Alert);
+        View dialogView = LayoutInflater.from(AddActivity.this).inflate(R.layout.list_item_dialog_layout, null);
+        TextView tvDelete = dialogView.findViewById(R.id.tv_delete);
+        TextView tvEdit = dialogView.findViewById(R.id.tv_edit);
+        tvEdit.setText("取消");
+        tvDelete.setOnClickListener(v1 -> {
+            try {
+                LitePal.beginTransaction();
+                int row = 0;
+                if (appOrWeb == 0) {
+                    if(tempAppPackage.getId() != 1){
+                        row = appPackageDao.delete(tempAppPackage);
+                        Log.i(TAG, "onItemLongClick: row = " + row);
+                        textSkipDao.deleteByAppOrWebId(appOrWeb, tempAppPackage.getId());
+                    }else{
+                        ToastUtils.toastShort(this, "此数据为不可删除数据");
+                    }
+
+                } else if (appOrWeb == 1) {
+                    if(tempWebInfo.getId() != 1){
+                        row = webInfoDao.delete(tempWebInfo);
+                        textSkipDao.deleteByAppOrWebId(appOrWeb, tempWebInfo.getId());
+                    }else{
+                        ToastUtils.toastShort(this, "此数据为不可删除数据");
+                    }
+                }
+                if (row > 0) {
+                    LitePal.setTransactionSuccessful();
+                    if (appOrWeb == 0) {
+                        appPackages = appPackageDao.findAll();
+                        mAppAdapter.removeData(position);
+                    } else if (appOrWeb == 1) {
+                        webInfoList = webInfoDao.findAll();
+                        mWebAdapter.removeData(position);
+                    }
+                    ToastUtils.toastShort(this, "删除成功");
+                } else {
+                    ToastUtils.toastShort(this, "删除失败！");
+                }
+                dialog.dismiss();
+            } finally {
+                LitePal.endTransaction();
+                dialog.dismiss();
+            }
+        });
+        tvEdit.setOnClickListener(v1 -> {
+            dialog.dismiss();
+        });
+        dialog.setContentView(dialogView);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+
 //        popupWindow.dismiss();
     }
 }

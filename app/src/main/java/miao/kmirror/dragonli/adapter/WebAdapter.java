@@ -96,4 +96,9 @@ public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.mWebInfoList = webInfoList;
         notifyDataSetChanged();
     }
+
+    public void removeData(int position){
+        this.mWebInfoList.remove(position);
+        notifyItemRemoved(position);
+    }
 }
