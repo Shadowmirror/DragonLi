@@ -45,12 +45,20 @@ public class TextSkipDao {
     /**
      * 删除某条跳转 APP 和网站库时删除对应文章的表关系
      */
-    public int deleteByAppOrWebId(Integer appOrWeb,Integer appOrWebId) {
+    public int deleteByAppOrWebId(Integer appOrWeb, Integer appOrWebId) {
         ContentValues values = new ContentValues();
         values.put("appOrWeb", 0);
         values.put("appOrWebId", 0);
         int i = LitePal.updateAll(TextSkip.class, values, "appOrWebId = ? and appOrWeb = ?", appOrWebId.toString(), appOrWeb.toString());
         return i;
+    }
+
+    public int updateById(int id, int appOrWeb, int appOrWebId) {
+        ContentValues values = new ContentValues();
+        values.put("appOrWeb", appOrWeb);
+        values.put("appOrWebId", appOrWebId);
+        int update = LitePal.update(TextSkip.class, values, id);
+        return update;
     }
 
 }

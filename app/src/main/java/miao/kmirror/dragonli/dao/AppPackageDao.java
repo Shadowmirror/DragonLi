@@ -23,6 +23,11 @@ public class AppPackageDao{
         return LitePal.findAll(AppPackage.class);
     }
 
+    public AppPackage findById(Integer id){
+        AppPackage appPackage = LitePal.find(AppPackage.class, id);
+        return appPackage;
+    }
+
     public boolean saveAll(List<AppPackage> appPackages){
         return LitePal.saveAll(appPackages);
     }

@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,19 +16,32 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import org.litepal.LitePal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import miao.kmirror.dragonli.R;
+import miao.kmirror.dragonli.adapter.AppAdapter;
+import miao.kmirror.dragonli.adapter.SkipItemClickListener;
+import miao.kmirror.dragonli.adapter.WebAdapter;
 import miao.kmirror.dragonli.bean.LockType;
 import miao.kmirror.dragonli.dao.AppPackageDao;
 import miao.kmirror.dragonli.dao.TextContentDao;
@@ -35,6 +51,7 @@ import miao.kmirror.dragonli.dao.WebInfoDao;
 import miao.kmirror.dragonli.entity.AppPackage;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.entity.TextSkip;
 import miao.kmirror.dragonli.entity.WebInfo;
 import miao.kmirror.dragonli.fragment.SelectLockTypeFragment;
 import miao.kmirror.dragonli.lock.activity.PasswordLoginActivity;
@@ -48,7 +65,7 @@ import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.RangePasswordUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity implements SkipItemClickListener {
 
     public static final String TAG = "EditActivity";
     private TextInfo textInfo;
@@ -93,14 +110,37 @@ public class EditActivity extends AppCompatActivity {
     private TextView password_length;
 
     /**
+     * App 和 Web 页跳转
+     */
+    private AppPackage currentApp;
+    private WebInfo currentWeb;
+    private int appOrWeb = 0;
+    private Button copyAndSkip;
+    private TextView tvAppOrWebName;
+    private LinearLayout skipList;
+    private ImageView imagePopup;
+    private List<AppPackage> appPackages;
+    private List<WebInfo> webInfoList;
+    private WebAdapter mWebAdapter;
+    private AppAdapter mAppAdapter;
+    private RecyclerView mRecyclerView;
+    public PopupWindow popupWindow;
+    private Spinner spSelect;
+    private TextView tvAddAppOrWeb;
+    private TextView dialogTitle;
+    private EditText etSkipName;
+    private EditText etSkipLink;
+    private TextSkip textSkip;
+
+    /**
      * 用于删除网站和应用条目的临时变量
      */
     private WebInfo tempWebInfo;
     private AppPackage tempAppPackage;
+    private int appOrWebId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
@@ -172,12 +212,201 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
-        /**
-         * 随机密码功能结束
-         * */
+        initAppOrWebSkipData();
 
+        /**
+         * 应用或网站跳转功能
+         * */
+        initAppOrWebSkip();
+
+        /**
+         * 数据加载
+         * */
         initData();
     }
+
+    private void initAppOrWebSkipData() {
+        appPackages = new ArrayList<>();
+        appPackages = appPackageDao.findAll();
+        webInfoList = new ArrayList<>();
+        webInfoList = webInfoDao.findAll();
+
+        textSkip = textSkipDao.findByTextId(textInfo.getId());
+        Log.i(TAG, "initData: textSkip = " + textSkip);
+        appOrWeb = textSkip.getAppOrWeb();
+        appOrWebId = textSkip.getAppOrWebId();
+        if (textSkip.getAppOrWeb() == 0) {
+            currentApp = appPackageDao.findById(appOrWebId);
+            currentWeb = webInfoList.get(0);
+        } else if (textSkip.getAppOrWeb() == 1) {
+            currentWeb = webInfoDao.findById(appOrWebId);
+            currentApp = appPackages.get(0);
+        }
+
+        Log.i(TAG, "initData: currentApp = " + currentApp);
+
+
+    }
+
+    /**
+     * 应用或网站跳转功能
+     */
+    public void initAppOrWebSkip() {
+        spSelect = findViewById(R.id.sp_select);
+        skipList = findViewById(R.id.skip_list);
+        tvAppOrWebName = findViewById(R.id.tv_app_or_web_name);
+        imagePopup = findViewById(R.id.image_popup);
+        copyAndSkip = findViewById(R.id.copy_and_skip);
+
+        spSelect.setSelection(appOrWeb);
+
+        spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                appOrWeb = position;
+                if (appOrWeb == 0) {
+                    tvAppOrWebName.setText(currentApp.getAppName());
+                } else if (appOrWeb == 1) {
+                    tvAppOrWebName.setText(currentWeb.getWebName());
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        skipList.setOnClickListener(v -> {
+            showPopupWindow();
+        });
+        copyAndSkip.setOnClickListener(v -> {
+            if (appOrWeb == 0) {
+                ActivityUtils.goApp(this, currentApp);
+            } else if (appOrWeb == 1) {
+                ActivityUtils.goWeb(this, currentWeb);
+            }
+        });
+    }
+
+    /**
+     * 列表弹窗功能
+     */
+    private void showPopupWindow() {
+        View view = LayoutInflater.from(this).inflate(R.layout.popupwindow, null);
+        tvAddAppOrWeb = view.findViewById(R.id.add_app_or_web);
+        if (appOrWeb == 0) {
+            tvAddAppOrWeb.setText("+ 增加应用");
+            tvAddAppOrWeb.setOnClickListener(v -> {
+                Dialog addDialog = createAddDialog();
+                addDialog.show();
+            });
+        } else if (appOrWeb == 1) {
+            tvAddAppOrWeb.setText("+ 增加网站");
+            tvAddAppOrWeb.setOnClickListener(v -> {
+                Dialog addDialog = createAddDialog();
+                addDialog.show();
+            });
+        }
+        mRecyclerView = view.findViewById(R.id.skip_recyclerView);
+        popupWindow = new PopupWindow(this);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(view);
+        popupWindow.setFocusable(true);
+        initPopupData();
+        popupWindow.showAsDropDown(imagePopup);
+    }
+
+    /**
+     * 添加网站或应用弹窗
+     */
+    public Dialog createAddDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_app_or_web, null);
+        dialogTitle = view.findViewById(R.id.dialog_title);
+        etSkipName = view.findViewById(R.id.et_skip_name);
+        etSkipLink = view.findViewById(R.id.et_skip_link);
+        if (appOrWeb == 0) {
+            dialogTitle.setText("增加应用");
+            etSkipName.setHint("应用名称：DragonLi");
+            etSkipLink.setHint("应用包名：miao.kmirror.dragonli");
+        } else if (appOrWeb == 1) {
+            dialogTitle.setText("增加网站");
+            etSkipName.setHint("网站名称：Github");
+            etSkipLink.setHint("网站网址：www.github.com");
+        }
+        builder.setView(view)
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String skipName = etSkipName.getText().toString();
+                        String skipLink = etSkipLink.getText().toString();
+                        if (TextUtils.isEmpty(skipName) || TextUtils.isEmpty(skipLink)) {
+                            ToastUtils.toastShort(EditActivity.this, "输入栏不能为空");
+                        } else {
+                            if (appOrWeb == 0) {
+                                AppPackage appPackage = new AppPackage();
+                                appPackage.setAppName(skipName);
+                                appPackage.setAppPackageName(skipLink);
+
+                                if (checkExist(skipName, skipLink)) {
+                                    ToastUtils.toastShort(EditActivity.this, "该应用已存在");
+                                } else {
+                                    appPackageDao.save(appPackage);
+                                    appPackages = appPackageDao.findAll();
+                                    mAppAdapter.refreshData(appPackages);
+                                }
+                            } else if (appOrWeb == 1) {
+                                WebInfo webInfo = new WebInfo();
+                                webInfo.setWebName(skipName);
+                                webInfo.setWebLink(skipLink);
+                                if (checkExist(skipName, skipLink)) {
+                                    ToastUtils.toastShort(EditActivity.this, "该网站已存在");
+                                } else {
+                                    webInfoDao.save(webInfo);
+                                    webInfoList = webInfoDao.findAll();
+                                    mWebAdapter.refreshData(webInfoList);
+                                }
+                            }
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        return builder.create();
+    }
+
+    private boolean checkExist(String skipName, String skipLink) {
+        int len = 0;
+        if (appOrWeb == 0) {
+            List<AppPackage> appPackages = LitePal.where("appName = ? and appPackageName = ?", skipName, skipLink).find(AppPackage.class);
+            len = appPackages.size();
+        } else if (appOrWeb == 1) {
+            List<WebInfo> webInfoList = LitePal.where("webName = ? and webLink = ?", skipName, skipLink).find(WebInfo.class);
+            len = webInfoList.size();
+        }
+        return len > 0 ? true : false;
+    }
+
+    /**
+     * 加载 PopupWindow 需要的数据
+     */
+    private void initPopupData() {
+        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        if (appOrWeb == 0) {
+            mAppAdapter = new AppAdapter(this, appPackages);
+            mAppAdapter.setOnItemClickListener(this);
+            mRecyclerView.setAdapter(mAppAdapter);
+        } else if (appOrWeb == 1) {
+            mWebAdapter = new WebAdapter(this, webInfoList);
+            mWebAdapter.setOnItemClickListener(this);
+            mRecyclerView.setAdapter(mWebAdapter);
+        }
+    }
+
 
     public void initRange() {
 
@@ -263,7 +492,7 @@ public class EditActivity extends AppCompatActivity {
             alertDialog.setPositiveButton("保存", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    save_text();
+                    saveText();
                 }
             });
             alertDialog.setNegativeButton("不保存", new DialogInterface.OnClickListener() {
@@ -311,7 +540,7 @@ public class EditActivity extends AppCompatActivity {
         save.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                save_text();
+                saveText();
                 return true;
             }
         });
@@ -384,6 +613,11 @@ public class EditActivity extends AppCompatActivity {
     private void initData() {
         Intent intent = getIntent();
         textInfo = (TextInfo) intent.getSerializableExtra("textInfo");
+        if (appOrWeb == 0) {
+            tvAppOrWebName.setText(currentApp.getAppName());
+        } else if (appOrWeb == 1) {
+            tvAppOrWebName.setText(currentWeb.getWebName());
+        }
         if (textInfo != null) {
             etTitle.setText(textInfo.getTitle());
             TextContent textContent = textContentDao.findById(textInfo.getId());
@@ -395,7 +629,7 @@ public class EditActivity extends AppCompatActivity {
     /**
      * 保存文本
      */
-    public void save_text() {
+    public void saveText() {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
         if (TextUtils.isEmpty(title)) {
@@ -412,7 +646,8 @@ public class EditActivity extends AppCompatActivity {
             LitePal.beginTransaction();
             int row1 = textInfoDao.update(textInfo);
             int row2 = textContentDao.update(textContent);
-            if (row1 > 0 && row2 > 0) {
+            int row3 = textSkipDao.updateById(textSkip.getId(), appOrWeb, appOrWebId);
+            if (row1 > 0 && row2 > 0 && row3 > 0) {
                 LitePal.setTransactionSuccessful();
                 ToastUtils.toastShort(this, "修改成功！");
                 this.finish();
@@ -425,5 +660,97 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemClick(View v, int position) {
+        if (appOrWeb == 0) {
+            AppPackage appPackage = appPackages.get(position);
+            currentApp = appPackage;
+            appOrWebId = currentApp.getId();
+            tvAppOrWebName.setText(appPackage.getAppName());
+        } else if (appOrWeb == 1) {
+            WebInfo webInfo = webInfoList.get(position);
+            currentWeb = webInfo;
+            appOrWebId = currentWeb.getId();
+            tvAppOrWebName.setText(webInfo.getWebName());
+        }
+        popupWindow.dismiss();
+    }
 
+    /**
+     * 应用或网站条目删除
+     */
+    @Override
+    public void onItemLongClick(View v, int position) {
+        if (appOrWeb == 0) {
+            tempAppPackage = appPackages.get(position);
+        } else if (appOrWeb == 1) {
+            tempWebInfo = webInfoList.get(position);
+        }
+        // 弹出弹窗
+        Dialog dialog = new Dialog(this, android.R.style.ThemeOverlay_Material_Dialog_Alert);
+        View dialogView = LayoutInflater.from(EditActivity.this).inflate(R.layout.list_item_dialog_layout, null);
+        TextView tvDelete = dialogView.findViewById(R.id.tv_delete);
+        TextView tvEdit = dialogView.findViewById(R.id.tv_edit);
+        tvEdit.setText("取消");
+        tvDelete.setOnClickListener(v1 -> {
+            try {
+                LitePal.beginTransaction();
+                int row = 0;
+                if (appOrWeb == 0) {
+                    if (tempAppPackage.getId() != 1) {
+                        if (currentApp.getAppName()
+                                == tempAppPackage.getAppName()
+                                && currentApp.getAppPackageName()
+                                == tempAppPackage.getAppPackageName()) {
+                            currentApp = appPackages.get(0);
+                            tvAppOrWebName.setText(currentApp.getAppName());
+                        }
+                        row = appPackageDao.delete(tempAppPackage);
+                        Log.i(TAG, "onItemLongClick: row = " + row);
+                        textSkipDao.deleteByAppOrWebId(appOrWeb, tempAppPackage.getId());
+                    } else {
+                        ToastUtils.toastShort(this, "此数据为不可删除数据");
+                    }
+
+                } else if (appOrWeb == 1) {
+                    if (tempWebInfo.getId() != 1) {
+                        if (currentWeb.getWebName()
+                                == tempWebInfo.getWebName()
+                                && currentWeb.getWebLink()
+                                == tempWebInfo.getWebLink()) {
+                            currentApp = appPackages.get(0);
+                            tvAppOrWebName.setText(currentWeb.getWebName());
+                        }
+                        row = webInfoDao.delete(tempWebInfo);
+                        textSkipDao.deleteByAppOrWebId(appOrWeb, tempWebInfo.getId());
+                    } else {
+                        ToastUtils.toastShort(this, "此数据为不可删除数据");
+                    }
+                }
+                if (row > 0) {
+                    LitePal.setTransactionSuccessful();
+                    if (appOrWeb == 0) {
+                        appPackages = appPackageDao.findAll();
+                        mAppAdapter.removeData(position);
+                    } else if (appOrWeb == 1) {
+                        webInfoList = webInfoDao.findAll();
+                        mWebAdapter.removeData(position);
+                    }
+                    ToastUtils.toastShort(this, "删除成功");
+                } else {
+                    ToastUtils.toastShort(this, "删除失败！");
+                }
+                dialog.dismiss();
+            } finally {
+                LitePal.endTransaction();
+                dialog.dismiss();
+            }
+        });
+        tvEdit.setOnClickListener(v1 -> {
+            dialog.dismiss();
+        });
+        dialog.setContentView(dialogView);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
 }

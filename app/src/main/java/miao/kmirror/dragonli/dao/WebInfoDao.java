@@ -23,6 +23,11 @@ public class WebInfoDao {
         return LitePal.findAll(WebInfo.class);
     }
 
+    public WebInfo findById(Integer id){
+        WebInfo webInfo = LitePal.find(WebInfo.class, id);
+        return webInfo;
+    }
+
     public boolean saveAll(List<WebInfo> webInfos){
         return LitePal.saveAll(webInfos);
     }
