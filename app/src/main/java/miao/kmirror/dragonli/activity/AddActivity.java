@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -41,10 +42,12 @@ import miao.kmirror.dragonli.adapter.WebAdapter;
 import miao.kmirror.dragonli.dao.AppPackageDao;
 import miao.kmirror.dragonli.dao.TextContentDao;
 import miao.kmirror.dragonli.dao.TextInfoDao;
+import miao.kmirror.dragonli.dao.TextSkipDao;
 import miao.kmirror.dragonli.dao.WebInfoDao;
 import miao.kmirror.dragonli.entity.AppPackage;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.entity.TextSkip;
 import miao.kmirror.dragonli.entity.WebInfo;
 import miao.kmirror.dragonli.utils.AESEncryptUtils;
 import miao.kmirror.dragonli.utils.ActivityUtils;
@@ -90,6 +93,7 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
     private TextInfoDao textInfoDao = new TextInfoDao();
     private AppPackageDao appPackageDao = new AppPackageDao();
     private WebInfoDao webInfoDao = new WebInfoDao();
+    private TextSkipDao textSkipDao = new TextSkipDao();
 
 
     /**
@@ -109,6 +113,10 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
     private RecyclerView mRecyclerView;
     public PopupWindow popupWindow;
     private Spinner spSelect;
+    private TextView tvAddAppOrWeb;
+    private TextView dialogTitle;
+    private EditText etSkipName;
+    private EditText etSkipLink;
 
 
     @Override
@@ -168,9 +176,9 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
         webInfoList = webInfoDao.findAll();
         currentWeb = webInfoList.get(0);
 
-        if(appOrWeb == 0){
+        if (appOrWeb == 0) {
             tvAppOrWebName.setText(currentApp.getAppName());
-        }else if(appOrWeb == 1){
+        } else if (appOrWeb == 1) {
             tvAppOrWebName.setText(currentWeb.getWebName());
         }
 
@@ -190,10 +198,10 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 appOrWeb = position;
-                if(appOrWeb == 0){
+                if (appOrWeb == 0) {
                     currentApp = appPackages.get(0);
                     tvAppOrWebName.setText(currentApp.getAppName());
-                }else if(appOrWeb == 1){
+                } else if (appOrWeb == 1) {
                     currentWeb = webInfoList.get(0);
                     tvAppOrWebName.setText(currentWeb.getWebName());
                 }
@@ -208,9 +216,9 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
             showPopupWindow();
         });
         copyAndSkip.setOnClickListener(v -> {
-            if(appOrWeb == 0){
+            if (appOrWeb == 0) {
                 ActivityUtils.goApp(this, currentApp);
-            }else if(appOrWeb == 1){
+            } else if (appOrWeb == 1) {
                 ActivityUtils.goWeb(this, currentWeb);
             }
         });
@@ -221,6 +229,20 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
      */
     private void showPopupWindow() {
         View view = LayoutInflater.from(this).inflate(R.layout.popupwindow, null);
+        tvAddAppOrWeb = view.findViewById(R.id.add_app_or_web);
+        if (appOrWeb == 0) {
+            tvAddAppOrWeb.setText("+ 增加应用");
+            tvAddAppOrWeb.setOnClickListener(v -> {
+                Dialog addDialog = createAddDialog();
+                addDialog.show();
+            });
+        } else if (appOrWeb == 1) {
+            tvAddAppOrWeb.setText("+ 增加网站");
+            tvAddAppOrWeb.setOnClickListener(v -> {
+                Dialog addDialog = createAddDialog();
+                addDialog.show();
+            });
+        }
         mRecyclerView = view.findViewById(R.id.skip_recyclerView);
         popupWindow = new PopupWindow(this);
         popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -232,16 +254,91 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
     }
 
     /**
+     * 添加网站或应用弹窗
+     */
+    public Dialog createAddDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddActivity.this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_app_or_web, null);
+        dialogTitle = view.findViewById(R.id.dialog_title);
+        etSkipName = view.findViewById(R.id.et_skip_name);
+        etSkipLink = view.findViewById(R.id.et_skip_link);
+        if (appOrWeb == 0) {
+            dialogTitle.setText("增加应用");
+            etSkipName.setHint("应用名称：DragonLi");
+            etSkipLink.setHint("应用包名：miao.kmirror.dragonli");
+        } else if (appOrWeb == 1) {
+            dialogTitle.setText("增加网站");
+            etSkipName.setHint("网站名称：Github");
+            etSkipLink.setHint("网站网址：www.github.com");
+        }
+        builder.setView(view)
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String skipName = etSkipName.getText().toString();
+                        String skipLink = etSkipLink.getText().toString();
+                        if (TextUtils.isEmpty(skipName) || TextUtils.isEmpty(skipLink)) {
+                            ToastUtils.toastShort(AddActivity.this, "输入栏不能为空");
+                        } else {
+                            if (appOrWeb == 0) {
+                                AppPackage appPackage = new AppPackage();
+                                appPackage.setAppName(skipName);
+                                appPackage.setAppPackageName(skipLink);
+
+                                if (checkExist(skipName, skipLink)) {
+                                    ToastUtils.toastShort(AddActivity.this, "该应用已存在");
+                                } else {
+                                    appPackageDao.save(appPackage);
+                                    appPackages = appPackageDao.findAll();
+                                    mAppAdapter.refreshData(appPackages);
+                                }
+                            } else if (appOrWeb == 1) {
+                                WebInfo webInfo = new WebInfo();
+                                webInfo.setWebName(skipName);
+                                webInfo.setWebLink(skipLink);
+                                if (checkExist(skipName, skipLink)) {
+                                    ToastUtils.toastShort(AddActivity.this, "该网站已存在");
+                                } else {
+                                    webInfoDao.save(webInfo);
+                                    webInfoList = webInfoDao.findAll();
+                                    mWebAdapter.refreshData(webInfoList);
+                                }
+                            }
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        return builder.create();
+    }
+
+    private boolean checkExist(String skipName, String skipLink) {
+        int len = 0;
+        if (appOrWeb == 0) {
+            List<AppPackage> appPackages = LitePal.where("appName = ? and appPackageName = ?", skipName, skipLink).find(AppPackage.class);
+            len = appPackages.size();
+        } else if (appOrWeb == 1) {
+            List<WebInfo> webInfoList = LitePal.where("webName = ? and webLink = ?", skipName, skipLink).find(WebInfo.class);
+            len = webInfoList.size();
+        }
+        return len > 0 ? true : false;
+    }
+
+
+    /**
      * 加载 PopupWindow 需要的数据
      */
     private void initPopupData() {
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        if(appOrWeb == 0){
+        if (appOrWeb == 0) {
             mAppAdapter = new AppAdapter(this, appPackages);
             mAppAdapter.setOnItemClickListener(this);
             mRecyclerView.setAdapter(mAppAdapter);
-        } else if(appOrWeb == 1){
+        } else if (appOrWeb == 1) {
             mWebAdapter = new WebAdapter(this, webInfoList);
             mWebAdapter.setOnItemClickListener(this);
             mRecyclerView.setAdapter(mWebAdapter);
@@ -340,7 +437,7 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
             alertDialog.setPositiveButton("保存", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    add_text();
+                    addText();
                 }
             });
             alertDialog.setNegativeButton("不保存", new DialogInterface.OnClickListener() {
@@ -387,7 +484,7 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                add_text();
+                addText();
                 return true;
             }
         });
@@ -395,7 +492,7 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
 
     }
 
-    public void add_text() {
+    public void addText() {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
         if (TextUtils.isEmpty(title)) {
@@ -408,12 +505,25 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
         textInfo.setTitle(title);
         textInfo.setUpdateDate(DateUtils.getCurrentTimeFormat());
         textContent.setContent(AESEncryptUtils.encrypt(content, AESEncryptUtils.TEST_PASS));
+        int appOrWebId = 0;
+        if (appOrWeb == 0) {
+            appOrWebId = currentApp.getId();
+        } else {
+            appOrWebId = currentWeb.getId();
+        }
         // 开启事务操作
         try {
             LitePal.beginTransaction();
             boolean result1 = textInfoDao.save(textInfo);
             boolean result2 = textContentDao.save(textContent);
-            if (result1 && result2) {
+            TextInfo newAddText = textInfoDao.findNewAddText();
+            int newAddTextId = newAddText.getId();
+            Log.i(TAG, "add_text: newAddText = " + newAddText);
+            boolean result3 = textSkipDao.save(appOrWeb, newAddTextId, appOrWebId);
+            if (result1
+                    && result2
+                    && newAddText.getUpdateDate().equals(textInfo.getUpdateDate())
+                    && result3) {
                 LitePal.setTransactionSuccessful();
                 ToastUtils.toastShort(this, "添加成功！");
                 this.finish();
@@ -427,15 +537,25 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
 
     @Override
     public void onItemClick(View v, int position) {
-        if(appOrWeb == 0){
+        if (appOrWeb == 0) {
             AppPackage appPackage = appPackages.get(position);
             currentApp = appPackage;
             tvAppOrWebName.setText(appPackage.getAppName());
-        }else if(appOrWeb == 1){
+        } else if (appOrWeb == 1) {
             WebInfo webInfo = webInfoList.get(position);
             currentWeb = webInfo;
             tvAppOrWebName.setText(webInfo.getWebName());
         }
         popupWindow.dismiss();
+    }
+
+    @Override
+    public void onItemLongClick(View v, int position) {
+        if (appOrWeb == 0) {
+            ToastUtils.toastShort(this, "你长按了应用区");
+        } else if (appOrWeb == 1) {
+            ToastUtils.toastShort(this, "你长按了网站区");
+        }
+//        popupWindow.dismiss();
     }
 }

@@ -61,7 +61,16 @@
             android:name=".activity.MainActivity"
             android:exported="true"
             android:label="主页面"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
         <activity
             android:name=".activity.EditActivity"
             android:label="编辑记事"
@@ -70,11 +79,6 @@
             android:name=".activity.AddActivity"
             android:label="添加记事"
             android:parentActivityName=".activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
 
         </activity>

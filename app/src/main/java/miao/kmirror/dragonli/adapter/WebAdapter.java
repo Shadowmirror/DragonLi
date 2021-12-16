@@ -37,6 +37,16 @@ public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(skipItemClickListener != null){
+                        skipItemClickListener.onItemLongClick(v, getAbsoluteAdapterPosition());
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 
@@ -80,5 +90,10 @@ public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setOnItemClickListener(SkipItemClickListener listener){
         skipItemClickListener = listener;
+    }
+
+    public void refreshData(List<WebInfo> webInfoList){
+        this.mWebInfoList = webInfoList;
+        notifyDataSetChanged();
     }
 }

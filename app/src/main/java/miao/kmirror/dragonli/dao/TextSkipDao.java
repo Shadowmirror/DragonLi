@@ -8,8 +8,11 @@ import java.util.List;
 
 import miao.kmirror.dragonli.entity.TextSkip;
 
+/**
+ * @author Kmirror
+ */
 public class TextSkipDao {
-    private TextSkip textSkip;
+    private TextSkip textSkip = new TextSkip();
 
     /**
      * 根据文章 Id 查询与该文章对应的跳转关系

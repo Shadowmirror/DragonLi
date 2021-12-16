@@ -45,15 +45,23 @@ public class TextInfoDao {
         return update;
     }
 
-    private int updateLockType(TextInfo info){
+    private int updateLockType(TextInfo info) {
         ContentValues values = new ContentValues();
         values.put("lockType", info.getLockType());
         int update = LitePal.update(TextInfo.class, values, info.getId());
         return update;
     }
 
-    public List<TextInfo> findAll(){
-       return LitePal.findAll(TextInfo.class);
+    public List<TextInfo> findAll() {
+        return LitePal.findAll(TextInfo.class);
+    }
+
+    /**
+     * 查找新增文章 / 密码本 ID
+     * */
+    public TextInfo findNewAddText() {
+        TextInfo last = LitePal.findLast(TextInfo.class);
+        return last;
     }
 
 }

@@ -113,6 +113,11 @@ public class TestActivity extends AppCompatActivity implements SkipItemClickList
         popupWindow.dismiss();
     }
 
+    @Override
+    public void onItemLongClick(View v, int position) {
+
+    }
+
 //    private void saveApp() {
 //        String appName = etAppName.getText().toString();
 //        String appPackageName = etAppPackageName.getText().toString();

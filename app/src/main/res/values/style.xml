@@ -16,15 +16,18 @@
         <item name="android:background">@drawable/edit_text_bg</item>
         <item name="android:paddingLeft">10dp</item>
     </style>
+
     <style name="MyTextStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">20sp</item>
     </style>
+
     <style name="MySwitchStyle">
         <item name="android:showText">true</item>
         <item name="android:textOn">开</item>
         <item name="android:textOff">关</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
 </resources>
