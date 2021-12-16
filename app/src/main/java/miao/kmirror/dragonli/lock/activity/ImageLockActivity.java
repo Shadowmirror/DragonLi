@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.TextView;
 
 import miao.kmirror.dragonli.R;
@@ -62,7 +63,16 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
                 imagePassword = "";
                 isMatch = false;
                 mTvTitle.setText("两次图形不一致，请重新绘制");
-                mImageLockView.resetGraphicalPassword();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        /**
+                         *要执行的操作
+                         */
+                        mImageLockView.resetGraphicalPassword();
+                    }
+                }, 1000);
             }
         }
 

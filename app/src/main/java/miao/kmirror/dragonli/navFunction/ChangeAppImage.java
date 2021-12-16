@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
-public class ChangeAppImage extends AppCompatActivity implements ImageLockView.OnGraphChangedListener{
+public class ChangeAppImage extends AppCompatActivity implements ImageLockView.OnGraphChangedListener {
 
 
     private ImageLockView mImageLockView;
@@ -27,11 +28,11 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
     private Button mTvCancel;
     /**
      * 记录是否重新设置密码
-     * */
+     */
     private boolean isReset = false;
     /**
      * 记录第一次绘制密码
-     * */
+     */
     private String imagePassword;
     private boolean isMatch = false;
 
@@ -41,6 +42,7 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
         setContentView(R.layout.activity_change_app_image);
         initView();
     }
+
     private void initView() {
         mTvTitle = findViewById(R.id.tv_title);
         mImageLockView = findViewById(R.id.il_graphical_pw);
@@ -57,42 +59,54 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
     @Override
     public void onGraphFinish(String password) {
         String tempPassword = MD5Utils.getMD5Code(password);
-        if(!isReset){
+        if (!isReset) {
             // 验证应用手势锁
             mTvTitle.setText("请绘制应用原手势锁");
             String localPassword = SpfUtils.getString(this, "imagePassword");
-            if(localPassword.equals(tempPassword)){
+            if (localPassword.equals(tempPassword)) {
                 isReset = true;
                 mImageLockView.resetGraphicalPassword();
                 ToastUtils.toastShort(this, "手势密码验证成功，请设置新的手势锁");
-            }else{
+            } else {
                 mImageLockView.setMatch(false);
                 ToastUtils.toastShort(ChangeAppImage.this, "密码错误");
-                TimerTask task = new TimerTask() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        /**
+                         *要执行的操作
+                         */
                         mImageLockView.resetGraphicalPassword();
                     }
-                };
-                Timer timer = new Timer();
-                timer.schedule(task, 1000);
+                }, 1000);
+
             }
-        }else{
-            if(!isMatch){
+        } else {
+            if (!isMatch) {
                 mTvTitle.setText("请再输入一遍");
                 imagePassword = tempPassword;
                 mImageLockView.resetGraphicalPassword();
                 isMatch = true;
-            }else{
-                if(imagePassword.equals(tempPassword)){
+            } else {
+                if (imagePassword.equals(tempPassword)) {
                     SpfUtils.saveString(this, "imagePassword", imagePassword);
                     ToastUtils.toastShort(this, "手势锁修改成功！");
                     ActivityUtils.flagActivityClearTask(this, MainActivity.class);
-                }else{
+                } else {
                     imagePassword = "";
                     isMatch = false;
                     mTvTitle.setText("两次图形不一致，请重新绘制");
-                    mImageLockView.resetGraphicalPassword();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            /**
+                             *要执行的操作
+                             */
+                            mImageLockView.resetGraphicalPassword();
+                        }
+                    }, 1000);
                 }
             }
         }

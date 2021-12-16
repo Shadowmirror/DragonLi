@@ -228,7 +228,6 @@ public class ImageLockView extends View {
             point.setTouch(false);
             point.setError(false);
         }
-
         isMatch = true;
         invalidate();
     }

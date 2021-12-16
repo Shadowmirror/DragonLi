@@ -27,10 +27,15 @@ import org.litepal.LitePal;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.bean.LockType;
+import miao.kmirror.dragonli.dao.AppPackageDao;
 import miao.kmirror.dragonli.dao.TextContentDao;
 import miao.kmirror.dragonli.dao.TextInfoDao;
+import miao.kmirror.dragonli.dao.TextSkipDao;
+import miao.kmirror.dragonli.dao.WebInfoDao;
+import miao.kmirror.dragonli.entity.AppPackage;
 import miao.kmirror.dragonli.entity.TextContent;
 import miao.kmirror.dragonli.entity.TextInfo;
+import miao.kmirror.dragonli.entity.WebInfo;
 import miao.kmirror.dragonli.fragment.SelectLockTypeFragment;
 import miao.kmirror.dragonli.lock.activity.PasswordLoginActivity;
 import miao.kmirror.dragonli.singleActivity.SingleFingerLockActivity;
@@ -47,21 +52,23 @@ public class EditActivity extends AppCompatActivity {
 
     public static final String TAG = "EditActivity";
     private TextInfo textInfo;
-    private TextContentDao textContentDao = new TextContentDao();
-    private TextInfoDao textInfoDao = new TextInfoDao();
+
     private EditText etTitle;
     private EditText etContent;
-    /**
-     * 显示随机密码的长度
-     */
-    private TextView password_length;
-
 
     private boolean isChange = false;
     private int skipOne = 1;
     private MenuItem lockTitle;
     private int tempUnlock;
 
+    /**
+     * 数据库操作
+     */
+    private TextContentDao textContentDao = new TextContentDao();
+    private TextInfoDao textInfoDao = new TextInfoDao();
+    private AppPackageDao appPackageDao = new AppPackageDao();
+    private WebInfoDao webInfoDao = new WebInfoDao();
+    private TextSkipDao textSkipDao = new TextSkipDao();
 
     /**
      * 随机密码功能
@@ -72,6 +79,7 @@ public class EditActivity extends AppCompatActivity {
      * 2 表示不含有
      * 默认是仅数字
      */
+    private Switch ableRange;
     private int haveNumber = 1;
     private int haveLetter = 0;
     private int haveSymbol = 0;
@@ -79,6 +87,16 @@ public class EditActivity extends AppCompatActivity {
     Switch swEnableLetter;
     Switch swEnableSymbol;
     SeekBar seekBar;
+    /**
+     * 显示随机密码的长度
+     */
+    private TextView password_length;
+
+    /**
+     * 用于删除网站和应用条目的临时变量
+     */
+    private WebInfo tempWebInfo;
+    private AppPackage tempAppPackage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +158,7 @@ public class EditActivity extends AppCompatActivity {
         password_length = findViewById(R.id.password_length);
         LinearLayout rangeView = findViewById(R.id.range_view);
         rangeView.setVisibility(View.GONE);
-        Switch ableRange = findViewById(R.id.able_range);
+        ableRange = findViewById(R.id.able_range);
         ableRange.setChecked(false);
         ableRange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

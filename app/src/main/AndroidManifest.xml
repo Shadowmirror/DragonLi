@@ -37,6 +37,11 @@
             android:exported="false" /> <!-- 登录模块 -->
         <activity android:name=".activity.LoginActivity">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".lock.activity.PasswordLoginActivity"
@@ -63,11 +68,6 @@
             android:label="主页面"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
 
         </activity>

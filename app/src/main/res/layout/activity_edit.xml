@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.EditActivity">
 
 
@@ -21,19 +22,67 @@
             <TextView
                 style="@style/MyTextStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:text="标题：" />
 
             <EditText
                 android:id="@+id/et_title"
                 style="@style/MyEditStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:maxLines="1" />
         </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_to_app_or_web"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <Spinner
+                android:id="@+id/sp_select"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:entries="@array/spinner_class"
+                tools:ignore="MissingConstraints" />
+
+            <LinearLayout
+                app:layout_constraintLeft_toRightOf="@id/sp_select"
+                android:id="@+id/skip_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:id="@+id/tv_app_or_web_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="吾爱破解论坛" />
+
+                <ImageView
+                    android:id="@+id/image_popup"
+                    android:layout_width="20dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/popup" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/copy_and_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="复制并前往"
+                android:background="@drawable/btn_normal"
+                app:layout_constraintRight_toRightOf="@id/constraint_to_app_or_web"
+                tools:ignore="MissingConstraints" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <LinearLayout

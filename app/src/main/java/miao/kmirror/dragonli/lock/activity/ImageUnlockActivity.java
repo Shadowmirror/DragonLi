@@ -3,6 +3,7 @@ package miao.kmirror.dragonli.lock.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -54,14 +55,16 @@ public class ImageUnlockActivity extends AppCompatActivity implements ImageLockV
         } else {
             mImageLockView.setMatch(false);
             ToastUtils.toastShort(ImageUnlockActivity.this, "密码错误");
-            TimerTask task = new TimerTask() {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    /**
+                     *要执行的操作
+                     */
                     mImageLockView.resetGraphicalPassword();
                 }
-            };
-            Timer timer = new Timer();
-            timer.schedule(task, 1000);
+            }, 1000);
         }
     }
 }

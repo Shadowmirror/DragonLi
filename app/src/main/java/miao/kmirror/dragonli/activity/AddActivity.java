@@ -577,19 +577,33 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
                 LitePal.beginTransaction();
                 int row = 0;
                 if (appOrWeb == 0) {
-                    if(tempAppPackage.getId() != 1){
+                    if (tempAppPackage.getId() != 1) {
+                        if (currentApp.getAppName()
+                                == tempAppPackage.getAppName()
+                                && currentApp.getAppPackageName()
+                                == tempAppPackage.getAppPackageName()) {
+                            currentApp = appPackages.get(0);
+                            tvAppOrWebName.setText(currentApp.getAppName());
+                        }
                         row = appPackageDao.delete(tempAppPackage);
                         Log.i(TAG, "onItemLongClick: row = " + row);
                         textSkipDao.deleteByAppOrWebId(appOrWeb, tempAppPackage.getId());
-                    }else{
+                    } else {
                         ToastUtils.toastShort(this, "此数据为不可删除数据");
                     }
 
                 } else if (appOrWeb == 1) {
-                    if(tempWebInfo.getId() != 1){
+                    if (tempWebInfo.getId() != 1) {
+                        if (currentWeb.getWebName()
+                                == tempWebInfo.getWebName()
+                                && currentWeb.getWebLink()
+                                == tempWebInfo.getWebLink()) {
+                            currentApp = appPackages.get(0);
+                            tvAppOrWebName.setText(currentWeb.getWebName());
+                        }
                         row = webInfoDao.delete(tempWebInfo);
                         textSkipDao.deleteByAppOrWebId(appOrWeb, tempWebInfo.getId());
-                    }else{
+                    } else {
                         ToastUtils.toastShort(this, "此数据为不可删除数据");
                     }
                 }
