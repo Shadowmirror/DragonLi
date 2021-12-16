@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 android:layout_margin="20dp"
-                android:onClick="to_page_add_text"
+                android:onClick="toPageAddText"
                 app:backgroundTint="@color/green_200"
                 android:src="@drawable/ic_input_add" />
         </FrameLayout>

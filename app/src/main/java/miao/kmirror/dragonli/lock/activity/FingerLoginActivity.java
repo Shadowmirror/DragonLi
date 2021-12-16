@@ -18,6 +18,7 @@ import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 
 public class FingerLoginActivity extends AppCompatActivity {
@@ -30,6 +31,7 @@ public class FingerLoginActivity extends AppCompatActivity {
         textInfo = (TextInfo) getIntent().getSerializableExtra("textInfo");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finger_login);
+        ToolbarUtils.initToolBar(this);
         Button btVerifyFinger = findViewById(R.id.bt_verify_finger);
         BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("请验证指纹")

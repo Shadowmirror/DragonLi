@@ -3,6 +3,7 @@ package miao.kmirror.dragonli.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,6 +59,7 @@ import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.RangePasswordUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class AddActivity extends AppCompatActivity implements SkipItemClickListener {
 
@@ -132,6 +134,8 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        ToolbarUtils.initToolBar(this);
 
         etTitle = findViewById(R.id.et_title);
         etContent = findViewById(R.id.et_content);

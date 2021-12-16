@@ -1,6 +1,7 @@
 package miao.kmirror.dragonli.lock.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,10 @@ public class ImageUnlockActivity extends AppCompatActivity implements ImageLockV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_unlock);
+
+        Toolbar myToolBar = findViewById(R.id.test_toolbar);
+        setSupportActionBar(myToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
 
     }

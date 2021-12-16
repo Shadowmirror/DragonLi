@@ -1,6 +1,7 @@
 package miao.kmirror.dragonli.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class LoginActivity extends AppCompatActivity{
     public static final String TAG = "LoginActivity";
@@ -31,6 +33,8 @@ public class LoginActivity extends AppCompatActivity{
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ToolbarUtils.initToolBar(this, false);
+
         Button password = findViewById(R.id.login_password);
         Button finger = findViewById(R.id.login_finger);
         Button image = findViewById(R.id.login_image);
@@ -44,4 +48,5 @@ public class LoginActivity extends AppCompatActivity{
             ActivityUtils.simpleIntent(this, ImageUnlockActivity.class);
         });
     }
+
 }

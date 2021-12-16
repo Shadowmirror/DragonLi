@@ -14,6 +14,7 @@ import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class ImageLockActivity extends AppCompatActivity implements ImageLockView.OnGraphChangedListener {
     public static final String TAG = "ImageLockActivity";
@@ -28,6 +29,7 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_unlock);
+        ToolbarUtils.initToolBar(this);
         initView();
     }
 

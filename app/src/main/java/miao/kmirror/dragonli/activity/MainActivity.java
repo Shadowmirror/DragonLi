@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void to_page_add_text(View view) {
+    public void toPageAddText(View view) {
         Intent intent = new Intent(MainActivity.this, AddActivity.class);
         startActivity(intent);
     }
@@ -197,13 +197,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                Log.i(TAG, "onQueryTextChange: newText = " + newText);
                 mTextList = textInfoDao.findLikeTitleKey(newText);
                 mMyAdapter.refreshData(mTextList);
                 return true;
             }
         });
-//        return super.onCreateOptionsMenu(menu);
         return true;
     }
 

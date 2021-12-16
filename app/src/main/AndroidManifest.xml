@@ -11,12 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DragonLi">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.TestActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".navFunction.ChangeAppPassword"
             android:exported="false" />
@@ -35,8 +33,9 @@
         <activity
             android:name=".singleActivity.SinglePasswordLockActivity"
             android:exported="false" /> <!-- 登录模块 -->
-        <activity android:name=".activity.LoginActivity">
-
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,11 +65,7 @@
             android:name=".activity.MainActivity"
             android:exported="true"
             android:label="主页面"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-
-
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
         <activity
             android:name=".activity.EditActivity"
             android:label="编辑记事"
@@ -78,10 +73,7 @@
         <activity
             android:name=".activity.AddActivity"
             android:label="添加记事"
-            android:parentActivityName=".activity.MainActivity">
-
-
-        </activity>
+            android:parentActivityName=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

@@ -67,6 +67,7 @@ import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.RangePasswordUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class EditActivity extends AppCompatActivity implements SkipItemClickListener {
 
@@ -147,6 +148,8 @@ public class EditActivity extends AppCompatActivity implements SkipItemClickList
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        ToolbarUtils.initToolBar(this);
+
         Intent intent = getIntent();
         tempUnlock = intent.getIntExtra("tempUnlock", 0);
         textInfo = (TextInfo) intent.getSerializableExtra("textInfo");

@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".activity.LoginActivity">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/test_toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/green_200"-->
-<!--        tools:ignore="MissingConstraints" />-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/test_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/green_200"
+        app:titleTextColor="@color/white"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/login_password"
