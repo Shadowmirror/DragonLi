@@ -76,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:text="复制并前往"
+                android:background="@drawable/btn_normal"
                 app:layout_constraintRight_toRightOf="@id/constraint_to_app_or_web"
                 tools:ignore="MissingConstraints" />
 

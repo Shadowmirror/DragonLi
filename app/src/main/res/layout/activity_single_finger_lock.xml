@@ -7,10 +7,12 @@
     tools:context=".singleActivity.SingleFingerLockActivity">
 
     <Button
+        android:background="@drawable/btn_normal"
         android:id="@+id/bt_verify_finger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="验证指纹"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

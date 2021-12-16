@@ -12,26 +12,32 @@
         android:text="请选择加密方式" />
 
     <Button
+        android:background="@drawable/btn_normal"
         android:id="@+id/single_lock_to_finger"
         style="@style/MyTextStyle"
         android:layout_width="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginVertical="5dp"
         android:text="指纹加密" />
 
     <Button
+        android:background="@drawable/btn_normal"
         android:id="@+id/single_lock_to_image"
         style="@style/MyTextStyle"
         android:layout_width="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginVertical="5dp"
         android:text="手势加密" />
 
     <Button
+        android:background="@drawable/btn_normal"
         android:id="@+id/single_lock_to_password"
         style="@style/MyTextStyle"
         android:layout_width="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginVertical="5dp"
         android:text="密码加密" />
 </LinearLayout>
