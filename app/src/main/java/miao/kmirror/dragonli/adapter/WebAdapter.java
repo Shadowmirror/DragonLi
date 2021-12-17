@@ -20,15 +20,13 @@ public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class WebViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvWebName;
-        TextView tvWebLink;
-        ViewGroup rlWebContainer;
+        TextView tvSkipName;
+        ViewGroup rlSkipContainer;
 
         public WebViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.tvWebName = itemView.findViewById(R.id.tv_web_name);
-            this.tvWebLink = itemView.findViewById(R.id.tv_web_link);
-            this.rlWebContainer = itemView.findViewById(R.id.rl_item_web_container);
+            this.tvSkipName = itemView.findViewById(R.id.tv_skip_name);
+            this.rlSkipContainer = itemView.findViewById(R.id.rl_item_skip_container);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -62,7 +60,7 @@ public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_web_view, parent, false);
+        View view = inflater.inflate(R.layout.list_item_skip_view, parent, false);
         WebViewHolder holder = new WebViewHolder(view);
         return holder;
     }
@@ -79,8 +77,7 @@ public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void bindWebViewHolder(WebViewHolder holder, int position) {
         WebInfo webInfo = mWebInfoList.get(position);
-        holder.tvWebName.setText(webInfo.getWebName());
-        holder.tvWebLink.setText(webInfo.getWebLink());
+        holder.tvSkipName.setText(webInfo.getWebName());
     }
 
     @Override

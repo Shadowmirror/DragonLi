@@ -19,6 +19,7 @@ import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class ChangeAppImage extends AppCompatActivity implements ImageLockView.OnGraphChangedListener {
 
@@ -40,6 +41,7 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_app_image);
+        ToolbarUtils.initToolBar(this, false);
         initView();
     }
 

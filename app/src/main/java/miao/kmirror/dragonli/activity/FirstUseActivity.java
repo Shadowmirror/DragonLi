@@ -24,6 +24,7 @@ import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class FirstUseActivity extends AppCompatActivity {
 
@@ -37,6 +38,7 @@ public class FirstUseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_use);
+        ToolbarUtils.initToolBar(this, false);
         initLocalWebAndApp();
         EtPassword = findViewById(R.id.et_password);
         EtAgainPassword = findViewById(R.id.et_again_password);

@@ -17,6 +17,7 @@ import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class SinglePasswordUnlockActivity extends AppCompatActivity {
     private EditText EtPassword;
@@ -28,6 +29,7 @@ public class SinglePasswordUnlockActivity extends AppCompatActivity {
         textInfo = (TextInfo) getIntent().getSerializableExtra("textInfo");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_password_unlock);
+        ToolbarUtils.initToolBar(this);
         // 密码登录
         EtPassword = findViewById(R.id.et_password);
         BtVerifyPassword = findViewById(R.id.bt_verify_password);

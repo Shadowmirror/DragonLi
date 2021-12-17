@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,126 +7,37 @@
     android:orientation="vertical"
     tools:context=".activity.TestActivity">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/test_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/green_200"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/white"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="去主页：" />
-
-        <LinearLayout
-            android:id="@+id/test_show_info"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/test_app_name"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="淘宝" />
-
-            <TextView
-                android:id="@+id/test_app_package"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="com.taobao.taobao" />
-
-            <ImageView
-                android:id="@+id/test_popup"
-                android:layout_width="20dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/popup" />
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <Button
-        android:background="@drawable/btn_normal"
-        android:id="@+id/test_button"
+    <ImageView
+        android:id="@+id/login_finger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="去这里" />
+        android:src="@drawable/finger"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test_toolbar" />
 
-    <!--    <Button-->
-    <!--        android:id="@+id/test"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="测试PopupWindow" />-->
-
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="20dp"-->
-    <!--        android:orientation="horizontal">-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            android:layout_margin="10dp"-->
-    <!--            android:text="App名称："-->
-    <!--            android:textSize="25sp" />-->
-
-    <!--        <EditText-->
-    <!--            android:id="@+id/et_app_name"-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:textSize="25sp" />-->
-    <!--    </LinearLayout>-->
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="20dp"-->
-    <!--        android:orientation="horizontal">-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            android:layout_margin="10dp"-->
-    <!--            android:text="App包名："-->
-    <!--            android:textSize="25sp" />-->
-
-    <!--        <EditText-->
-    <!--            android:id="@+id/et_app_package_name"-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:textSize="25sp" />-->
-    <!--    </LinearLayout>-->
-
-    <!--    <Button-->
-    <!--        android:id="@+id/add_app"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:text="新增APP" />-->
-    <!--    <Button-->
-    <!--        android:id="@+id/add_web"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:text="新增Web" />-->
-
-    <!--    <Button-->
-    <!--        android:id="@+id/test"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:text="功能测试" />-->
+    <TextView
+        android:id="@+id/image_or_password_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="密码 / 手势登录"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

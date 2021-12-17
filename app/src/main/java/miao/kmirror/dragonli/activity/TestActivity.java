@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,108 +28,52 @@ import miao.kmirror.dragonli.dao.AppPackageDao;
 import miao.kmirror.dragonli.dao.WebInfoDao;
 import miao.kmirror.dragonli.entity.AppPackage;
 import miao.kmirror.dragonli.utils.ActivityUtils;
+import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
-public class TestActivity extends AppCompatActivity implements SkipItemClickListener {
+public class TestActivity extends AppCompatActivity {
 
     public static final String TAG = "TextActivity";
 
-    private AppPackageDao appPackageDao = new AppPackageDao();
-    private WebInfoDao webInfoDao = new WebInfoDao();
-
-    private List<AppPackage> appPackages;
-    private AppAdapter mAppAdapter;
-    private RecyclerView mRecyclerView;
-    public PopupWindow popupWindow;
-    private TextView testAppName;
-    private TextView testAppPackage;
-    private ImageView testPopup;
-    private Button testButton;
-    private LinearLayout testShowInfo;
-    private AppPackage currentApp;
-
+    private ImageView loginFinger;
+    private TextView imageOrPasswordLogin;
+    private TextView loginImage;
+    private TextView loginPassword;
+    private BottomSheetDialog bottomSheetDialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        ToolbarUtils.initToolBar(this, false, "测试页");
         initView();
-        initData();
     }
 
-    public void initView(){
-        testAppName = findViewById(R.id.test_app_name);
-        testAppPackage = findViewById(R.id.test_app_package);
-        testShowInfo = findViewById(R.id.test_show_info);
-        testShowInfo.setOnClickListener(v -> {
-            showPopupWindow();
-        });
-
-        testButton = findViewById(R.id.test_button);
-        testButton.setOnClickListener(v->{
-            ActivityUtils.goApp(this, currentApp);
+    void initView() {
+        loginFinger = findViewById(R.id.login_finger);
+        imageOrPasswordLogin = findViewById(R.id.image_or_password_login);
+        imageOrPasswordLogin.setOnClickListener(v -> {
+            showBottomSheetDialog();
         });
     }
 
-    public void initData(){
-        appPackages = new ArrayList<>();
-        this.appPackages = appPackageDao.findAll();
-        currentApp = appPackages.get(0);
-        testAppName.setText(currentApp.getAppName());
-        testAppPackage.setText(currentApp.getAppPackageName());
+    void showBottomSheetDialog() {
+        bottomSheetDialog = new BottomSheetDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_login, null);
+        loginImage = view.findViewById(R.id.login_image);
+        loginPassword = view.findViewById(R.id.login_password);
+        loginImage.setOnClickListener(v -> {
+
+        });
+        loginPassword.setOnClickListener(v -> {
+
+        });
+        bottomSheetDialog.setContentView(view);
+
+        bottomSheetDialog.setCancelable(true);
+        bottomSheetDialog.show();
     }
-
-    private void showPopupWindow() {
-        View view = LayoutInflater.from(TestActivity.this).inflate(R.layout.popupwindow, null);
-
-        mRecyclerView = view.findViewById(R.id.skip_recyclerView);
-        popupWindow = new PopupWindow(TestActivity.this);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setContentView(view);
-        popupWindow.setFocusable(true);
-        initPopupData();
-        popupWindow.showAsDropDown(testShowInfo);
-    }
-
-    public void initPopupData() {
-        mAppAdapter = new AppAdapter(this, appPackages);
-        mAppAdapter.setOnItemClickListener(this);
-
-
-        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-
-        mRecyclerView.setAdapter(mAppAdapter);
-
-//        mAppAdapter.refreshData(appPackages);
-
-
-    }
-
-    @Override
-    public void onItemClick(View v, int position) {
-        AppPackage appPackage = appPackages.get(position);
-        currentApp = appPackage;
-        testAppName.setText(appPackage.getAppName());
-        testAppPackage.setText(appPackage.getAppPackageName());
-        popupWindow.dismiss();
-    }
-
-    @Override
-    public void onItemLongClick(View v, int position) {
-
-    }
-
-//    private void saveApp() {
-//        String appName = etAppName.getText().toString();
-//        String appPackageName = etAppPackageName.getText().toString();
-//        AppPackage appPackage = new AppPackage();
-//        appPackage.setAppPackageName(appPackageName);
-//        appPackage.setAppName(appName);
-//        appPackageDao.save(appPackage);
-////        Log.i(TAG, "saveApp: 是否保存成功 = " + appPackageDao.save(appPackage));
-//    }
 
 
 }

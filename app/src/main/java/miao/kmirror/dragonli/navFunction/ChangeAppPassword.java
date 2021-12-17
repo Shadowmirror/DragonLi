@@ -12,6 +12,7 @@ import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class ChangeAppPassword extends AppCompatActivity {
     private EditText etLocalPassword;
@@ -24,6 +25,7 @@ public class ChangeAppPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_app_password);
+        ToolbarUtils.initToolBar(this, false);
         etLocalPassword = findViewById(R.id.et_local_password);
         etPassword = findViewById(R.id.et_password);
         etAgainPassword = findViewById(R.id.et_again_password);

@@ -4,6 +4,7 @@ package miao.kmirror.dragonli.lock.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,12 +33,12 @@ public class FingerLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finger_login);
         ToolbarUtils.initToolBar(this);
-        Button btVerifyFinger = findViewById(R.id.bt_verify_finger);
+        ImageView loginFinger = findViewById(R.id.login_finger);
         BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("请验证指纹")
                 .setNegativeButtonText("取消")
                 .build();
-        btVerifyFinger.setOnClickListener(new View.OnClickListener() {
+        loginFinger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getPrompt().authenticate(promptInfo);
@@ -58,14 +59,14 @@ public class FingerLoginActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                ToastUtils.toastShort(FingerLoginActivity.this, "Authentication Succeeded!!");
+                ToastUtils.toastShort(FingerLoginActivity.this, "指纹验证成功");
                 ActivityUtils.flagActivityClearTask(FingerLoginActivity.this, MainActivity.class);
             }
 
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                ToastUtils.toastShort(FingerLoginActivity.this, "Authentication Failed!");
+                ToastUtils.toastShort(FingerLoginActivity.this, "指纹验证失败");
             }
         };
 

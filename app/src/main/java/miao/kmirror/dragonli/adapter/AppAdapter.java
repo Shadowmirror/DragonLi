@@ -29,7 +29,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_app_view, parent, false);
+        View view = inflater.inflate(R.layout.list_item_skip_view, parent, false);
         AppViewHolder holder = new AppViewHolder(view);
         return holder;
     }
@@ -47,12 +47,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void bindAppViewHolder(AppViewHolder holder, int position) {
         AppPackage appPackage = mAppPackages.get(position);
-        holder.tvAppPackage.setText(appPackage.getAppPackageName());
-        holder.tvAppName.setText(appPackage.getAppName());
-
-//        holder.rlAppContainer.setOnClickListener(v -> {
-//            popupWindow.dismiss();
-//        });
+        holder.tvSkipName.setText(appPackage.getAppName());
     }
 
     public void refreshData(List<AppPackage> appPackages) {
@@ -72,15 +67,13 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class AppViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvAppName;
-        TextView tvAppPackage;
-        ViewGroup rlAppContainer;
+        TextView tvSkipName;
+        ViewGroup rlSkipContainer;
 
         public AppViewHolder(View itemView) {
             super(itemView);
-            this.tvAppName = itemView.findViewById(R.id.tv_app_name);
-            this.tvAppPackage = itemView.findViewById(R.id.tv_app_package);
-            this.rlAppContainer = itemView.findViewById(R.id.rl_item_app_container);
+            this.tvSkipName = itemView.findViewById(R.id.tv_skip_name);
+            this.rlSkipContainer = itemView.findViewById(R.id.rl_item_skip_container);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

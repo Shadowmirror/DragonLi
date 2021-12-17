@@ -14,6 +14,7 @@ import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class SinglePasswordLockActivity extends AppCompatActivity {
     private TextInfo textInfo;
@@ -24,6 +25,7 @@ public class SinglePasswordLockActivity extends AppCompatActivity {
         textInfo = (TextInfo) getIntent().getSerializableExtra("textInfo");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_password_lock);
+        ToolbarUtils.initToolBar(this);
         EditText EtPassword = findViewById(R.id.et_password);
         EditText EtAgainPassword = findViewById(R.id.et_again_password);
         Button verify = findViewById(R.id.bt_verify_password);

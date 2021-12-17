@@ -20,6 +20,7 @@ import miao.kmirror.dragonli.lock.widget.ImageLockView;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class SingleImageLockActivity extends AppCompatActivity implements ImageLockView.OnGraphChangedListener {
 
@@ -43,6 +44,7 @@ public class SingleImageLockActivity extends AppCompatActivity implements ImageL
         deleteLock = (boolean) getIntent().getBooleanExtra("deleteLock", false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_image_lock);
+        ToolbarUtils.initToolBar(this);
         initView();
     }
 

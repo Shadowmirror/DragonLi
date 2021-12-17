@@ -322,11 +322,11 @@ public class EditActivity extends AppCompatActivity implements SkipItemClickList
         popupWindow.setContentView(view);
         popupWindow.setFocusable(true);
         initPopupData();
-        popupWindow.showAsDropDown(imagePopup);
+        popupWindow.showAsDropDown(skipList);
     }
 
     /**
-     * 添加网站或应用弹窗
+     * 添加网站或应用的弹窗
      */
     public Dialog createAddDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);

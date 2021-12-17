@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.concurrent.Executor;
 
@@ -18,6 +19,7 @@ import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.utils.ToolbarUtils;
 
 public class SingleFingerLockActivity extends AppCompatActivity {
 
@@ -31,12 +33,13 @@ public class SingleFingerLockActivity extends AppCompatActivity {
         deleteLock = (boolean) getIntent().getBooleanExtra("deleteLock", false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_finger_lock);
+        ToolbarUtils.initToolBar(this);
         BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("请验证指纹")
                 .setNegativeButtonText("取消")
                 .build();
-        Button btVerifyFinger = findViewById(R.id.bt_verify_finger);
-        btVerifyFinger.setOnClickListener(v -> {
+        ImageView verifyFinger = findViewById(R.id.verify_finger);
+        verifyFinger.setOnClickListener(v -> {
             getPrompt().authenticate(promptInfo);
         });
         getPrompt().authenticate(promptInfo);

@@ -69,10 +69,12 @@
 
                     <TextView
                         android:id="@+id/tv_app_or_web_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="吾爱破解论坛" />
+                        android:text="长文本测试内容长文本测试内容" />
 
                     <ImageView
                         android:id="@+id/image_popup"

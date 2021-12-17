@@ -266,7 +266,7 @@ public class AddActivity extends AppCompatActivity implements SkipItemClickListe
         popupWindow.setContentView(view);
         popupWindow.setFocusable(true);
         initPopupData();
-        popupWindow.showAsDropDown(imagePopup);
+        popupWindow.showAsDropDown(skipList);
     }
 
     /**

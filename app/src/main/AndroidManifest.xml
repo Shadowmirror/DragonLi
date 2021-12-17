@@ -14,7 +14,9 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.TestActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".navFunction.ChangeAppPassword"
             android:exported="false" />
@@ -65,7 +67,9 @@
             android:name=".activity.MainActivity"
             android:exported="true"
             android:label="主页面"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+        </activity>
         <activity
             android:name=".activity.EditActivity"
             android:label="编辑记事"

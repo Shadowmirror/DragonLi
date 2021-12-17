@@ -14,9 +14,23 @@ public class ToolbarUtils {
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    public static void initToolBar(AppCompatActivity activity, String title){
+        Toolbar myToolBar = activity.findViewById(R.id.test_toolbar);
+        activity.setSupportActionBar(myToolBar);
+        activity.getSupportActionBar().setTitle(title);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     public static void initToolBar(AppCompatActivity activity, boolean isDisplayHome){
         Toolbar myToolBar = activity.findViewById(R.id.test_toolbar);
         activity.setSupportActionBar(myToolBar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(isDisplayHome);
+    }
+
+    public static void initToolBar(AppCompatActivity activity, boolean isDisplayHome, String title){
+        Toolbar myToolBar = activity.findViewById(R.id.test_toolbar);
+        activity.setSupportActionBar(myToolBar);
+        activity.getSupportActionBar().setTitle(title);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(isDisplayHome);
     }
 }
