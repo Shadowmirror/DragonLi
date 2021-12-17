@@ -9,6 +9,9 @@
         <item
             android:id="@+id/nav_setPassword"
             android:title="修改输入密码" />
+        <item
+            android:id="@+id/nav_setLeaveTime"
+            android:title="修改离开应用锁定时间" />
     </group>
 
 </menu>

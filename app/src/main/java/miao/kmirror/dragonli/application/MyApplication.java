@@ -9,6 +9,7 @@ import org.litepal.LitePal;
 
 import miao.kmirror.dragonli.activity.LoginActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
+import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 
 
@@ -17,7 +18,6 @@ import miao.kmirror.dragonli.utils.ToastUtils;
  */
 public class MyApplication extends Application {
 
-    public int leaveTime = 5;
 
     private int activityCount = 0;
 
@@ -49,6 +49,7 @@ public class MyApplication extends Application {
             if (activityCount == 0) {
                 //app回到前台
                 isForeground = true;
+                int leaveTime = SpfUtils.getInt(MyApplication.this, "leaveTime");
                 if (stopTime != 0) {
                     restartTime = System.currentTimeMillis();
                     // 离开应用时长

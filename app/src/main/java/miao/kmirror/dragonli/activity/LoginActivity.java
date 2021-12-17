@@ -43,17 +43,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        ToolbarUtils.initToolBar(this, false);
         if (SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD) == "" && SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD) == "") {
             // 第一次使用本应用
             ActivityUtils.flagActivityClearTask(this, FirstUseActivity.class);
             ToastUtils.toastShort(this, "第一次使用本应用，请使用设置应用密码！");
+        }else{
+            initView();
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ToolbarUtils.initToolBar(this, false);
-
-        initView();
 
     }
 

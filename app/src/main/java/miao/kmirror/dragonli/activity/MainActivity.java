@@ -1,7 +1,10 @@
 package miao.kmirror.dragonli.activity;
 
+import static java.lang.Math.E;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -13,10 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -27,6 +34,7 @@ import java.util.List;
 
 import miao.kmirror.dragonli.adapter.MyAdapter;
 import miao.kmirror.dragonli.R;
+import miao.kmirror.dragonli.application.MyApplication;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.navFunction.ChangeAppImage;
@@ -42,27 +50,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean appUnLocked = false;
 
     private long pauseTime = 0;
-
     private long resumeTime = 0;
 
     public static final String TAG = "MainActivity";
 
     private RecyclerView mRecyclerView;
-
     private DrawerLayout mDrawerLayout;
-
     private FloatingActionButton mBtnAdd;
-
     private List<TextInfo> mTextList;
-
     private MyAdapter mMyAdapter;
 
     public static final int MODE_LINEAR = 0;
-
     public static final int MODE_GRID = 1;
-
     public static final String KEY_LAYOUT_MODE = "key_layout_mode";
-
     private int currentListLayoutMode = MODE_LINEAR;
 
     @Override
@@ -160,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_setPassword:
                         ActivityUtils.simpleIntent(MainActivity.this, ChangeAppPassword.class);
                         break;
+                    case R.id.nav_setLeaveTime:
+                        setLeaveTime();
                     default:
                         break;
                 }
@@ -168,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
     }
 
     public void toPageAddText(View view) {
@@ -236,5 +237,34 @@ public class MainActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
+    }
+
+    /**
+     * 设置离开应用锁定时间
+     */
+    public void setLeaveTime() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_set_leave_time, null);
+        AlertDialog dialog = builder.setView(view).create();
+        EditText etLeaveTime = view.findViewById(R.id.et_leave_time);
+        Button btSetLeaveTime = view.findViewById(R.id.bt_set_leave_time);
+        etLeaveTime.setHint("当前设定时间为：" + SpfUtils.getInt(this, "leaveTime") + " 秒");
+        btSetLeaveTime.setOnClickListener(v -> {
+            String leaveTimeStr = etLeaveTime.getText().toString();
+            int leaveTime;
+            if (TextUtils.isEmpty(leaveTimeStr)) {
+                leaveTime = 0;
+            } else {
+                leaveTime = Integer.parseInt(leaveTimeStr);
+                if (leaveTime == 0) {
+                    ToastUtils.toastShort(this, "时间不能设为 0 秒");
+                } else {
+                    SpfUtils.saveInt(this, "leaveTime", leaveTime);
+                    ToastUtils.toastShort(this, "设置成功");
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
     }
 }
