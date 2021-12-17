@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ToolbarUtils.initToolBar(this, false);
-        if (SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD) == "" && SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD) == "") {
+        if (SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD) == "" || SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD) == "") {
             // 第一次使用本应用
             ActivityUtils.flagActivityClearTask(this, FirstUseActivity.class);
             ToastUtils.toastShort(this, "第一次使用本应用，请使用设置应用密码！");

@@ -42,8 +42,7 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
         mImageLockView.setDefaultColor(getResources().getColor(R.color.color_graphical_default_color));
         mImageLockView.setChooseColor(getResources().getColor(R.color.color_graphical_choose_color));
         mTvCancel.setOnClickListener(v -> {
-            Intent intent = new Intent(this, PasswordLoginActivity.class);
-            startActivity(intent);
+            finish();
         });
     }
 
