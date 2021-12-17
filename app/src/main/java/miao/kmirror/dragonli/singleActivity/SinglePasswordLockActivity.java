@@ -3,6 +3,7 @@ package miao.kmirror.dragonli.singleActivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -32,14 +33,16 @@ public class SinglePasswordLockActivity extends AppCompatActivity {
         verify.setOnClickListener(v -> {
             String password = EtPassword.getText().toString();
             String againPassword = EtAgainPassword.getText().toString();
-            if (password.equals(againPassword)) {
+            if (TextUtils.isEmpty(againPassword)) {
+                ToastUtils.toastShortCenter(this, "密码不能为空！");
+            } else if (password.equals(againPassword)) {
                 textInfo.setPassword(MD5Utils.getMD5Code(password));
                 textInfo.setLocked(true);
                 textInfo.setLockType(LockType.PASSWORD_LOCK);
                 textInfoDao.update(textInfo);
                 ActivityUtils.flagActivityClearTask(this, MainActivity.class);
             } else {
-                ToastUtils.toastShort(this, "两次密码不一致请重新输入！！！");
+                ToastUtils.toastShortCenter(this, "两次密码不一致请重新输入！！！");
             }
         });
     }

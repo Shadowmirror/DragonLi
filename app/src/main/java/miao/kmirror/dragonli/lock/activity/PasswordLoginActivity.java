@@ -56,14 +56,14 @@ public class PasswordLoginActivity extends AppCompatActivity{
     public void verifyPassword() {
         String password = EtPassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            ToastUtils.toastShort(this, "密码不能为空");
+            ToastUtils.toastShortCenter(this, "密码不能为空");
             return;
         } else {
             String tempPassword = MD5Utils.getMD5Code(password);
             if (tempPassword.equals(SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD))) {
                 ActivityUtils.flagActivityClearTask(this, MainActivity.class);
             } else {
-                ToastUtils.toastShort(this, "密码错误");
+                ToastUtils.toastShortCenter(this, "密码错误");
                 return;
             }
         }
@@ -72,7 +72,7 @@ public class PasswordLoginActivity extends AppCompatActivity{
     public void unlockPassword(){
         String password = EtPassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            ToastUtils.toastShort(this, "密码不能为空");
+            ToastUtils.toastShortCenter(this, "密码不能为空");
             return;
         } else {
             String tempPassword = MD5Utils.getMD5Code(password);
@@ -83,7 +83,7 @@ public class PasswordLoginActivity extends AppCompatActivity{
                 textInfoDao.update(textInfo);
                 finish();
             } else {
-                ToastUtils.toastShort(this, "密码错误");
+                ToastUtils.toastShortCenter(this, "密码错误");
                 return;
             }
         }

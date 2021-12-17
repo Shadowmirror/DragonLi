@@ -47,7 +47,7 @@
         <activity
             android:name=".lock.activity.PasswordLoginActivity"
             android:exported="true"
-            android:label="密码登录"
+            android:label="校验密码"
             android:parentActivityName=".activity.LoginActivity" />
         <activity
             android:name=".lock.activity.FingerLoginActivity"

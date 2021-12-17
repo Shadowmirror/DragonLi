@@ -42,7 +42,7 @@ public class SinglePasswordUnlockActivity extends AppCompatActivity {
     public void verifyPassword() {
         String password = EtPassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            ToastUtils.toastShort(this, "密码不能为空");
+            ToastUtils.toastShortCenter(this, "密码不能为空");
             return;
         } else {
             String tempPassword = MD5Utils.getMD5Code(password);
@@ -54,7 +54,7 @@ public class SinglePasswordUnlockActivity extends AppCompatActivity {
                         "tempUnlock",
                         LockType.TEMP_UNLOCK);
             } else {
-                ToastUtils.toastShort(this, "密码错误");
+                ToastUtils.toastShortCenter(this, "密码错误");
                 return;
             }
         }

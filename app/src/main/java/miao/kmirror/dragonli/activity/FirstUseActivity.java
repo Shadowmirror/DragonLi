@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,15 +47,18 @@ public class FirstUseActivity extends AppCompatActivity {
         toSettingImage.setOnClickListener(v -> {
             String password = EtPassword.getText().toString();
             String againPassword = EtAgainPassword.getText().toString();
-            if (password.equals(againPassword)) {
+            if (TextUtils.isEmpty(againPassword)) {
+                ToastUtils.toastShortCenter(this, "密码不能为空！");
+            } else if (password.equals(againPassword)) {
                 SpfUtils.saveString(this, PasswordUtils.COMMON_PASSWORD, MD5Utils.getMD5Code(password));
                 SpfUtils.saveInt(this, "leaveTime", 60);
                 Intent intent = new Intent(this, ImageLockActivity.class);
                 startActivity(intent);
             } else {
-                ToastUtils.toastShort(this, "两次密码不一致请重新输入！！！");
+                ToastUtils.toastShortCenter(this, "两次密码不一致请重新输入！！！");
             }
         });
+        Log.i(TAG, "onCreate: 空字符串的 MD5 = " + MD5Utils.getMD5Code(""));
     }
 
     private void initLocalWebAndApp() {
