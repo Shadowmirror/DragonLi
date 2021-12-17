@@ -81,9 +81,11 @@ public class LoginActivity extends AppCompatActivity {
         loginImage = view.findViewById(R.id.login_image);
         loginPassword = view.findViewById(R.id.login_password);
         loginImage.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
             ActivityUtils.simpleIntent(this, ImageUnlockActivity.class);
         });
         loginPassword.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
             ActivityUtils.simpleIntent(this, PasswordLoginActivity.class);
         });
         bottomSheetDialog.setContentView(view);

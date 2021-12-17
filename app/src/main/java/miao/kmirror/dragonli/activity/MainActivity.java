@@ -80,25 +80,17 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         refreshDataFromDb();
         setListLayout();
-        if (pauseTime != 0) {
-            resumeTime = System.currentTimeMillis();
-            // 离开应用时长
-            if ((resumeTime - pauseTime) / 1000 >= 60) {
-                ToastUtils.toastShort(this, "离开本应用已 60 秒，本应用自动锁定");
-                ActivityUtils.flagActivityClearTask(this, LoginActivity.class);
-            }
-        }
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        pauseTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void refreshDataFromDb() {
@@ -154,14 +146,14 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_setImage:
                         ActivityUtils.simpleIntent(MainActivity.this, ChangeAppImage.class);
                         break;
