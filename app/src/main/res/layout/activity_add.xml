@@ -5,17 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/test_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/green_200"
-        app:titleTextColor="@color/white"
-        tools:ignore="MissingConstraints" />
+
+    <include layout="@layout/mytoolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,10 +66,10 @@
                     <TextView
                         android:id="@+id/tv_app_or_web_name"
                         android:layout_width="150dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
                         android:layout_height="match_parent"
+                        android:ellipsize="end"
                         android:gravity="center"
+                        android:maxLines="1"
                         android:text="长文本测试内容长文本测试内容" />
 
                     <ImageView
@@ -216,7 +212,6 @@
 
         </LinearLayout>
     </ScrollView>
-
 
 
 </LinearLayout>

@@ -59,7 +59,6 @@ public class FirstUseActivity extends AppCompatActivity {
                 ToastUtils.toastShortCenter(this, "两次密码不一致请重新输入！！！");
             }
         });
-        Log.i(TAG, "onCreate: 空字符串的 MD5 = " + MD5Utils.getMD5Code(""));
     }
 
     private void initLocalWebAndApp() {
