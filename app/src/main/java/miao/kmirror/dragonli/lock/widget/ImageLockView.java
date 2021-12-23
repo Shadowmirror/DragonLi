@@ -17,6 +17,8 @@ import miao.kmirror.dragonli.bean.Point;
 public class ImageLockView extends View {
     private static final String TAG = "ImageLockView";
 
+    public final int LOCK_TIME = 500;
+
     private ArrayList<Point> mPointList;
     private ArrayList<Point> mChoosePointList;
     private boolean isMatch;
@@ -267,4 +269,5 @@ public class ImageLockView extends View {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
+
 }

@@ -82,7 +82,19 @@ public class SingleImageLockActivity extends AppCompatActivity implements ImageL
                     imagePassword = "";
                     isMatch = false;
                     mTvTitle.setText("两次图形不一致，请重新绘制");
-                    mImageLockView.resetGraphicalPassword();
+                    mImageLockView.setMatch(false);
+                    mImageLockView.setEnable(false);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            /**
+                             *要执行的操作
+                             */
+                            mImageLockView.resetGraphicalPassword();
+                            mImageLockView.setEnable(true);
+                        }
+                    }, mImageLockView.LOCK_TIME);
                 }
             }
         } else if(textInfo.getLocked() && textInfo.getPassword().equals(tempPassword)){
@@ -103,8 +115,9 @@ public class SingleImageLockActivity extends AppCompatActivity implements ImageL
                 finish();
             }
         }else{
+            mTvTitle.setText("密码错误，请重新绘制");
             mImageLockView.setMatch(false);
-            ToastUtils.toastShort(SingleImageLockActivity.this, "密码错误");
+            mImageLockView.setEnable(false);
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -113,8 +126,9 @@ public class SingleImageLockActivity extends AppCompatActivity implements ImageL
                      *要执行的操作
                      */
                     mImageLockView.resetGraphicalPassword();
+                    mImageLockView.setEnable(true);
                 }
-            }, 1000);
+            }, mImageLockView.LOCK_TIME);
         }
     }
 }

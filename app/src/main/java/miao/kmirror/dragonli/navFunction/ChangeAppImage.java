@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,17 +62,19 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
     @Override
     public void onGraphFinish(String password) {
         String tempPassword = MD5Utils.getMD5Code(password);
+
         if (!isReset) {
             // 验证应用手势锁
-            mTvTitle.setText("请绘制应用原手势锁");
             String localPassword = SpfUtils.getString(this, "imagePassword");
             if (localPassword.equals(tempPassword)) {
                 isReset = true;
                 mImageLockView.resetGraphicalPassword();
+                mTvTitle.setText("手势密码验证成功，请设置新的手势锁");
                 ToastUtils.toastShort(this, "手势密码验证成功，请设置新的手势锁");
             } else {
                 mImageLockView.setMatch(false);
                 ToastUtils.toastShort(ChangeAppImage.this, "密码错误");
+                mImageLockView.setEnable(false);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -80,8 +83,9 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
                          *要执行的操作
                          */
                         mImageLockView.resetGraphicalPassword();
+                        mImageLockView.setEnable(true);
                     }
-                }, 1000);
+                }, mImageLockView.LOCK_TIME);
 
             }
         } else {
@@ -98,7 +102,9 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
                 } else {
                     imagePassword = "";
                     isMatch = false;
+                    mImageLockView.setMatch(false);
                     mTvTitle.setText("两次图形不一致，请重新绘制");
+                    mImageLockView.setEnable(false);
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -107,8 +113,9 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
                              *要执行的操作
                              */
                             mImageLockView.resetGraphicalPassword();
+                            mImageLockView.setEnable(true);
                         }
-                    }, 1000);
+                    }, mImageLockView.LOCK_TIME);
                 }
             }
         }
