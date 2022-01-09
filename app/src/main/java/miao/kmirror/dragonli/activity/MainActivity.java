@@ -253,16 +253,15 @@ public class MainActivity extends AppCompatActivity {
             String leaveTimeStr = etLeaveTime.getText().toString();
             int leaveTime;
             if (TextUtils.isEmpty(leaveTimeStr)) {
-                leaveTime = 0;
+                leaveTimeStr = "0";
+            }
+            leaveTime = Integer.parseInt(leaveTimeStr);
+            if (leaveTime == 0) {
+                ToastUtils.toastShort(this, "时间不能设为 0 秒");
             } else {
-                leaveTime = Integer.parseInt(leaveTimeStr);
-                if (leaveTime == 0) {
-                    ToastUtils.toastShort(this, "时间不能设为 0 秒");
-                } else {
-                    SpfUtils.saveInt(this, "leaveTime", leaveTime);
-                    ToastUtils.toastShort(this, "设置成功");
-                    dialog.dismiss();
-                }
+                SpfUtils.saveInt(this, "leaveTime", leaveTime);
+                ToastUtils.toastShort(this, "设置成功");
+                dialog.dismiss();
             }
         });
         dialog.show();

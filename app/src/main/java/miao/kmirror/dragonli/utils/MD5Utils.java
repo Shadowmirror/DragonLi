@@ -32,7 +32,7 @@ public class MD5Utils {
 
     //加密文件
     public static String md5ForFile(File file) {
-        int buffersize = 1024;
+        int bufferSize = 1024;
         FileInputStream fis = null;
         DigestInputStream dis = null;
 
@@ -42,16 +42,16 @@ public class MD5Utils {
             fis = new FileInputStream(file);
             dis = new DigestInputStream(fis, messageDigest);
 
-            byte[] buffer = new byte[buffersize];
-            //DigestInputStream实际上在流处理文件时就在内部就进行了一定的处理
+            byte[] buffer = new byte[bufferSize];
+            // DigestInputStream 实际上在流处理文件时就在内部就进行了一定的处理
             while (dis.read(buffer) > 0) {
                 ;
             }
 
-            //通过DigestInputStream对象得到一个最终的MessageDigest对象。
+            // 通过 DigestInputStream 对象得到一个最终的MessageDigest对象。
             messageDigest = dis.getMessageDigest();
 
-            // 通过messageDigest拿到结果，也是字节数组，包含16个元素
+            // 通过 messageDigest 拿到结果，也是字节数组，包含 16 个元素
             byte[] array = messageDigest.digest();
             // 同样，把字节数组转换成字符串
             StringBuilder hex = new StringBuilder(array.length * 2);

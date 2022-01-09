@@ -6,14 +6,21 @@ import java.io.UnsupportedEncodingException;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * @author Kmirror
+ */
 public class AESEncryptUtils {
 
     public static final String TEST_PASS = "Kmirror";
 
-    /*   算法/模式/填充 */
-    private static final String CipherMode = "AES/ECB/PKCS5Padding";
+    /**
+     * 算法 / 模式 / 填充
+     * */
+    private static final String CIPHER_MODE = "AES/ECB/PKCS5Padding";
 
-    /*  创建密钥  */
+    /**
+     * 创建密钥
+     * */
     private static SecretKeySpec createKey(String password) {
         byte[] data = null;
         if (password == null) {
@@ -36,12 +43,13 @@ public class AESEncryptUtils {
         return new SecretKeySpec(data, "AES");
     }
 
-    /* 加密字节数据  */
+    /**
+     * 加密字节数据
+     * */
     public static byte[] encrypt(byte[] content, String password) {
         try {
             SecretKeySpec key = createKey(password);
-            System.out.println(key);
-            Cipher cipher = Cipher.getInstance(CipherMode);
+            Cipher cipher = Cipher.getInstance(CIPHER_MODE);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] result = cipher.doFinal(content);
             return result;
@@ -51,7 +59,9 @@ public class AESEncryptUtils {
         return null;
     }
 
-    /*加密(结果为16进制字符串)  */
+    /**
+     * 加密(结果为 16 进制字符串)
+     * */
     public static String encrypt(String content, String password) {
         byte[] data = null;
         try {
@@ -64,11 +74,13 @@ public class AESEncryptUtils {
         return result;
     }
 
-    /*解密字节数组*/
+    /**
+     * 解密字节数组
+     * */
     public static byte[] decrypt(byte[] content, String password) {
         try {
             SecretKeySpec key = createKey(password);
-            Cipher cipher = Cipher.getInstance(CipherMode);
+            Cipher cipher = Cipher.getInstance(CIPHER_MODE);
             cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] result = cipher.doFinal(content);
             return result;
@@ -78,7 +90,9 @@ public class AESEncryptUtils {
         return null;
     }
 
-    /*解密16进制的字符串为字符串  */
+    /**
+     * 解密 16 进制的字符串为字符串
+     * */
     public static String decrypt(String content, String password) {
         byte[] data = null;
         try {
@@ -99,8 +113,11 @@ public class AESEncryptUtils {
         return result;
     }
 
-    /*字节数组转成16进制字符串  */
-    public static String byte2hex(byte[] b) { // 一个字节的数，
+    /**
+     * 字节数组转成 16 进制字符串
+     * */
+    public static String byte2hex(byte[] b) {
+        // 一个字节的数
         StringBuffer sb = new StringBuffer(b.length * 2);
         String tmp = "";
         for (int n = 0; n < b.length; n++) {
@@ -111,10 +128,13 @@ public class AESEncryptUtils {
             }
             sb.append(tmp);
         }
-        return sb.toString().toUpperCase(); // 转成大写
+        // 转成大写
+        return sb.toString().toUpperCase();
     }
 
-    /*将hex字符串转换成字节数组 */
+    /**
+     * 将hex字符串转换成字节数组
+     * */
     private static byte[] hex2byte(String inputString) {
         if (inputString == null || inputString.length() < 2) {
             return new byte[0];
