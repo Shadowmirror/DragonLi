@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.lxj.xpopup.XPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ import java.util.List;
 import miao.kmirror.dragonli.adapter.MyAdapter;
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.application.MyApplication;
+import miao.kmirror.dragonli.constant.ConstantValue;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.navFunction.ChangeAppImage;
@@ -42,6 +45,7 @@ import miao.kmirror.dragonli.navFunction.ChangeAppPassword;
 import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
+import miao.kmirror.dragonli.widget.CustomCenterPopup;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -132,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        SpfUtils.saveUnLockData(this);
         mTextList = new ArrayList<>();
 //        mTextList = LitePal.findAll(Text.class);
 //        for (Text text : mTextList) {
@@ -151,17 +156,56 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav_setImage:
+                    case R.id.nav_set_image:
                         ActivityUtils.simpleIntent(MainActivity.this, ChangeAppImage.class);
                         break;
-                    case R.id.nav_setPassword:
+                    case R.id.nav_set_password:
                         ActivityUtils.simpleIntent(MainActivity.this, ChangeAppPassword.class);
                         break;
-                    case R.id.nav_setLeaveTime:
-                        setLeaveTime();
+                    case R.id.nav_set_leave_time:
+                        setConfigValuePopup(
+                                "离开应用锁定应用的时长",
+                                "此设置为当您离开应用多少秒后应用锁定的时长",
+                                "当前为 " + SpfUtils.getInt(getApplication(), ConstantValue.LEAVE_TIME) + " 秒",
+                                ConstantValue.LEAVE_TIME
+                        );
+                        break;
+                    case R.id.nav_set_error_lock_time:
+                        setConfigValuePopup(
+                                "错误过多应用锁定的时长",
+                                "此设置为当您输入错误密码超过最大次数后锁定应用的时长",
+                                "当前为 " + SpfUtils.getInt(getApplication(), ConstantValue.ERROR_LOCK_TIME) + " 分钟",
+                                ConstantValue.ERROR_LOCK_TIME
+                        );
+                        break;
+                    case R.id.nav_set_error_max_lock_number:
+                        setConfigValuePopup(
+                                "密码错误输入次数",
+                                "此设置为您的应用的手势密码和传统密码的最大输错次数",
+                                "当前次数为 " + SpfUtils.getInt(getApplication(), ConstantValue.ERROR_MAX_LOCK_NUMBER) + " 次",
+                                ConstantValue.ERROR_MAX_LOCK_NUMBER
+                        );
+                        break;
+                    case R.id.nav_set_image_lock_expiry_time:
+                        setConfigValuePopup(
+                                "手势密码提示修改密码时长",
+                                "此设置为多少天后提示您修改您的手势密码，以保证应用安全。\n弹窗提示时间 = 上次密码修改时间 + 您设置的天数",
+                                "当前设置为 " + SpfUtils.getInt(getApplication(), ConstantValue.IMAGE_LOCK_EXPIRY_TIME) + " 天",
+                                ConstantValue.IMAGE_LOCK_EXPIRY_TIME
+                        );
+                        break;
+                    case R.id.nav_set_password_expiry_time:
+                        setConfigValuePopup(
+                                "传统输入密码提示修改密码时长",
+                                "此设置为多少天后提示您修改您的传统输入密码，以保证应用安全。\n弹窗提示时间 = 上次密码修改时间 + 您设置的天数",
+                                "当前设置为 " + SpfUtils.getInt(getApplication(), ConstantValue.PASSWORD_EXPIRY_TIME) + " 天",
+                                ConstantValue.PASSWORD_EXPIRY_TIME
+                        );
+                        break;
                     default:
                         break;
                 }
@@ -170,6 +214,35 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    private void setConfigValuePopup(String title, String desc, String hint, String key) {
+        new XPopup.Builder(this)
+                .dismissOnTouchOutside(false)
+                .dismissOnBackPressed(false)
+                .asCustom(new CustomCenterPopup(
+                        this,
+                        title,
+                        desc,
+                        hint,
+                        (etContent) -> {
+                            String tempStr = etContent;
+                            int tempInt;
+                            if (TextUtils.isEmpty(tempStr)) {
+                                tempStr = "0";
+                            }
+                            tempInt = Integer.parseInt(tempStr);
+                            if (tempInt == 0) {
+                                ToastUtils.toastShort(this, "不能为 0 或空");
+                                return false;
+                            } else {
+                                SpfUtils.saveInt(this, key, tempInt);
+                                ToastUtils.toastShort(this, "设置成功");
+                                return true;
+                            }
+                        },
+                        () -> null)).show();
+
     }
 
     public void toPageAddText(View view) {
@@ -239,31 +312,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * 设置离开应用锁定时间
-     */
-    public void setLeaveTime() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        View view = LayoutInflater.from(this).inflate(R.layout.layout_set_leave_time, null);
-        AlertDialog dialog = builder.setView(view).create();
-        EditText etLeaveTime = view.findViewById(R.id.et_leave_time);
-        Button btSetLeaveTime = view.findViewById(R.id.bt_set_leave_time);
-        etLeaveTime.setHint("当前设定时间为：" + SpfUtils.getInt(this, "leaveTime") + " 秒");
-        btSetLeaveTime.setOnClickListener(v -> {
-            String leaveTimeStr = etLeaveTime.getText().toString();
-            int leaveTime;
-            if (TextUtils.isEmpty(leaveTimeStr)) {
-                leaveTimeStr = "0";
-            }
-            leaveTime = Integer.parseInt(leaveTimeStr);
-            if (leaveTime == 0) {
-                ToastUtils.toastShort(this, "时间不能设为 0 秒");
-            } else {
-                SpfUtils.saveInt(this, "leaveTime", leaveTime);
-                ToastUtils.toastShort(this, "设置成功");
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
 }

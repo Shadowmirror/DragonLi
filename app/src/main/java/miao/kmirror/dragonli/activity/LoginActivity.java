@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,19 +19,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.impl.ConfirmPopupView;
+import com.lxj.xpopup.interfaces.OnCancelListener;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
 
 import java.util.concurrent.Executor;
 
 import miao.kmirror.dragonli.R;
+import miao.kmirror.dragonli.constant.ConstantValue;
 import miao.kmirror.dragonli.lock.activity.FingerLoginActivity;
 import miao.kmirror.dragonli.lock.activity.ImageUnlockActivity;
 import miao.kmirror.dragonli.lock.activity.PasswordLoginActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
+import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 import miao.kmirror.dragonli.utils.ToolbarUtils;
 
+/**
+ * @author Kmirror
+ */
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
 
@@ -40,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView loginImage;
     private TextView loginPassword;
     private BottomSheetDialog bottomSheetDialog;
+    ConfirmPopupView lockPopup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +61,18 @@ public class LoginActivity extends AppCompatActivity {
             // 第一次使用本应用
             ActivityUtils.flagActivityClearTask(this, FirstUseActivity.class);
             ToastUtils.toastShort(this, "第一次使用本应用，请使用设置应用密码！");
-        }else{
+        } else {
+            initData();
             initView();
         }
 
+    }
+
+    private void initData() {
+        lockPopup = new XPopup.Builder(this)
+                .dismissOnBackPressed(false)
+                .dismissOnTouchOutside(false)
+                .asConfirm("应用已被锁定", "应用将于 " + DateUtils.getLockTimeFormat(this) + " 解锁", this::finish, this::finish);
     }
 
     void initView() {
@@ -69,9 +88,24 @@ public class LoginActivity extends AppCompatActivity {
         loginFinger.setOnClickListener(v -> {
             getPrompt().authenticate(promptInfo);
         });
-        getPrompt().authenticate(promptInfo);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: 重新进入登录页");
+        if (DateUtils.lockExpired(getApplication())) {
+            DateUtils.isLastErrorPasswordExpired(getApplication());
+            getPrompt().authenticate(promptInfo);
+        } else {
+            lockPopup.show();
+        }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        lockPopup.dismiss();
     }
 
     void showBottomSheetDialog() {
@@ -88,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
             ActivityUtils.simpleIntent(this, PasswordLoginActivity.class);
         });
         bottomSheetDialog.setContentView(view);
-
         bottomSheetDialog.setCancelable(true);
         bottomSheetDialog.show();
     }

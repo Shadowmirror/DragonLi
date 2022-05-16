@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import miao.kmirror.dragonli.R;
+import miao.kmirror.dragonli.constant.ConstantValue;
 import miao.kmirror.dragonli.dao.AppPackageDao;
 import miao.kmirror.dragonli.dao.WebInfoDao;
 import miao.kmirror.dragonli.entity.AppPackage;
@@ -41,6 +42,7 @@ public class FirstUseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_use);
         ToolbarUtils.initToolBar(this, false);
+        initConfigData();
         initLocalWebAndApp();
         EtPassword = findViewById(R.id.et_password);
         EtAgainPassword = findViewById(R.id.et_again_password);
@@ -52,13 +54,16 @@ public class FirstUseActivity extends AppCompatActivity {
                 ToastUtils.toastShortCenter(this, "密码不能为空！");
             } else if (password.equals(againPassword)) {
                 SpfUtils.saveString(this, PasswordUtils.COMMON_PASSWORD, MD5Utils.getMD5Code(password));
-                SpfUtils.saveInt(this, "leaveTime", 60);
                 Intent intent = new Intent(this, ImageLockActivity.class);
                 startActivity(intent);
             } else {
                 ToastUtils.toastShortCenter(this, "两次密码不一致请重新输入！！！");
             }
         });
+    }
+
+    private void initConfigData() {
+        SpfUtils.saveConfigData(getApplication());
     }
 
     private void initLocalWebAndApp() {

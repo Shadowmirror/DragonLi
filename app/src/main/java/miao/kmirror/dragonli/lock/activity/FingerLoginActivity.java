@@ -18,6 +18,7 @@ import miao.kmirror.dragonli.activity.MainActivity;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.utils.ActivityUtils;
+import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 import miao.kmirror.dragonli.utils.ToolbarUtils;
 

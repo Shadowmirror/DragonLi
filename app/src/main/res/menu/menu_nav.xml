@@ -3,15 +3,26 @@
 
     <group android:checkableBehavior="none">
         <item
-            android:id="@+id/nav_setImage"
+            android:id="@+id/nav_set_image"
             android:title="修改手势密码" />
-
         <item
-            android:id="@+id/nav_setPassword"
+            android:id="@+id/nav_set_password"
             android:title="修改输入密码" />
         <item
-            android:id="@+id/nav_setLeaveTime"
-            android:title="修改离开应用锁定时间" />
+            android:id="@+id/nav_set_leave_time"
+            android:title="修改离开应用锁定应用的时长" />
+        <item
+            android:id="@+id/nav_set_error_max_lock_number"
+            android:title="修改密码错误输入次数" />
+        <item
+            android:id="@+id/nav_set_error_lock_time"
+            android:title="修改超过密码输错次数锁定应用时长" />
+        <item
+            android:id="@+id/nav_set_image_lock_expiry_time"
+            android:title="修改应用手势密码提示修改时长" />
+        <item
+            android:id="@+id/nav_set_password_expiry_time"
+            android:title="修改应用输入密码提示修改时长" />
     </group>
 
 </menu>

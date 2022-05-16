@@ -69,15 +69,12 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
                 mImageLockView.setMatch(false);
                 mImageLockView.setEnable(false);
                 Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        /**
-                         *要执行的操作
-                         */
-                        mImageLockView.resetGraphicalPassword();
-                        mImageLockView.setEnable(true);
-                    }
+                handler.postDelayed(() -> {
+                    /**
+                     *要执行的操作
+                     */
+                    mImageLockView.resetGraphicalPassword();
+                    mImageLockView.setEnable(true);
                 }, mImageLockView.LOCK_TIME);
             }
         }
