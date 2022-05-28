@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,20 +51,22 @@ public class LoginActivity extends AppCompatActivity {
     private TextView loginImage;
     private TextView loginPassword;
     private BottomSheetDialog bottomSheetDialog;
-    ConfirmPopupView lockPopup;
+    private ConfirmPopupView lockPopup;
+    private BiometricPrompt prompt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ToolbarUtils.initToolBar(this, false);
-        if (SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD) == "" || SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD) == "") {
+        initData();
+        if (SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD).equals("") || SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD).equals("")) {
             // 第一次使用本应用
             ActivityUtils.flagActivityClearTask(this, FirstUseActivity.class);
             ToastUtils.toastShort(this, "第一次使用本应用，请使用设置应用密码！");
         } else {
-            initData();
             initView();
+            initListener();
         }
 
     }
@@ -73,32 +76,34 @@ public class LoginActivity extends AppCompatActivity {
                 .dismissOnBackPressed(false)
                 .dismissOnTouchOutside(false)
                 .asConfirm("应用已被锁定", "应用将于 " + DateUtils.getLockTimeFormat(this) + " 解锁", this::finish, this::finish);
-    }
-
-    void initView() {
-        imageOrPasswordLogin = findViewById(R.id.image_or_password_login);
-        imageOrPasswordLogin.setOnClickListener(v -> {
-            showBottomSheetDialog();
-        });
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("请验证指纹")
                 .setNegativeButtonText("取消")
                 .build();
+        prompt = getPrompt();
+    }
+
+    private void initView() {
+        imageOrPasswordLogin = findViewById(R.id.image_or_password_login);
         loginFinger = findViewById(R.id.login_finger);
-        loginFinger.setOnClickListener(v -> {
-            getPrompt().authenticate(promptInfo);
-        });
+    }
+
+    private void initListener() {
+        imageOrPasswordLogin.setOnClickListener(v -> showBottomSheetDialog());
+        loginFinger.setOnClickListener(v -> prompt.authenticate(promptInfo));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume: 重新进入登录页");
-        if (DateUtils.lockExpired(getApplication())) {
-            DateUtils.isLastErrorPasswordExpired(getApplication());
-            getPrompt().authenticate(promptInfo);
-        } else {
-            lockPopup.show();
+        if (promptInfo != null) {
+            if (DateUtils.lockExpired(getApplication())) {
+                DateUtils.isLastErrorPasswordExpired(getApplication());
+                prompt.authenticate(promptInfo);
+            } else {
+                lockPopup.show();
+            }
         }
     }
 
@@ -110,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void showBottomSheetDialog() {
         bottomSheetDialog = new BottomSheetDialog(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_login, null);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.dialog_login, null);
         loginImage = view.findViewById(R.id.login_image);
         loginPassword = view.findViewById(R.id.login_password);
         loginImage.setOnClickListener(v -> {
@@ -152,8 +157,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        BiometricPrompt biometricPrompt = new BiometricPrompt(this, executor, callback);
-        return biometricPrompt;
+        return new BiometricPrompt(this, executor, callback);
     }
 
 

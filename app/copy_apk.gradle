@@ -10,14 +10,14 @@ android.applicationVariants.all { variant ->
             //这里使用之前定义apk文件名称
 
 //            outputFileName = "${project.archivesBaseName}_v${variant.productFlavors[0].versionName}_${variant.productFlavors[0].versionCode}_${variant.productFlavors[0].name}_${releaseTime()}_${variant.buildType.name}.apk"
-            outputFileName = "${project.archivesBaseName}_v${versionName}_${releaseTime()}_${name}.apk"
+            outputFileName = "${project.archivesBaseName}_v${versionName}_${name}.apk"
         }
     }
 
     //复制到根目录下的output文件夹
     File desFilePath = new File("${rootDir}/app/output")
     //删除output目录
-    delete desFilePath
+    //delete desFilePath
 
     //API 'variant.getAssemble()' is obsolete and has been replaced with 'variant.getAssembleProvider()'.
     //It will be removed in version 7.0 of the Android Gradle plugin.

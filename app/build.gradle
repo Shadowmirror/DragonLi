@@ -18,7 +18,6 @@ android {
     }
 
     signingConfigs {
-
         debug {}
 
         release {
@@ -32,6 +31,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -74,9 +74,9 @@ dependencies {
 }
 
 def readProperties(key) {
-    File file = rootProject.file('package.properties')
+    File file = rootProject.file('local.properties')
     if (file.exists()) {
-        InputStream inputStream = rootProject.file('package.properties').newDataInputStream()
+        InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
         Properties properties = new Properties()
         properties.load(inputStream)
 
