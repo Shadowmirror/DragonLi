@@ -1,10 +1,13 @@
 package miao.kmirror.dragonli.lock.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.ConditionVariable;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.LoginActivity;
 import miao.kmirror.dragonli.lock.widget.ImageLockView;
+import miao.kmirror.dragonli.utils.ActivityUtils;
 import miao.kmirror.dragonli.utils.MD5Utils;
 import miao.kmirror.dragonli.utils.PasswordUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
@@ -26,6 +30,11 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
     private TextView mTvTitle;
     private boolean isMatch = false;
     private String imagePassword;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, ImageLockActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +68,8 @@ public class ImageLockActivity extends AppCompatActivity implements ImageLockVie
         } else {
             if (imagePassword.equals(password)) {
                 SpfUtils.saveString(this, PasswordUtils.IMAGE_PASSWORD, MD5Utils.getMD5Code(password));
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                SpfUtils.updateImageExpiryDate(getApplication());
+                ActivityUtils.flagActivityClearTask(this, LoginActivity.class);
                 ToastUtils.toastShort(this, "密码设置成功！");
             } else {
                 imagePassword = "";

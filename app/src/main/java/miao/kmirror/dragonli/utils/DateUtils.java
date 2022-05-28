@@ -1,6 +1,7 @@
 package miao.kmirror.dragonli.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,5 +43,31 @@ public class DateUtils {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 手势密码或者输入密码是否过期
+     * 0 为均未过期
+     * 1 为手势密码过期
+     * 2 为输入密码过期
+     * 3 为两者均过期
+     */
+    public static int passwordExpiry(Context context) {
+        Long imageLockExpiryDate = SpfUtils.getLong(context, ConstantValue.IMAGE_LOCK_EXPIRY_DATE);
+        Long passwordLockExpiryDate = SpfUtils.getLong(context, ConstantValue.PASSWORD_EXPIRY_DATE);
+        Long currentDate = System.currentTimeMillis();
+        if (imageLockExpiryDate <= currentDate && passwordLockExpiryDate <= currentDate) {
+            return 3;
+        } else if (imageLockExpiryDate <= currentDate) {
+            return 1;
+        } else if (passwordLockExpiryDate <= currentDate) {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+
+    public static Long getDayTimeMillis(int day) {
+        return day * 24 * 3600 * 1000L;
     }
 }

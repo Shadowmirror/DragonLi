@@ -2,6 +2,7 @@ package miao.kmirror.dragonli.lock.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -35,6 +36,11 @@ public class PasswordLoginActivity extends AppCompatActivity {
     private TextInfo textInfo;
     private TextInfoDao textInfoDao = new TextInfoDao();
     private int errorMaxLockNumber;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, PasswordLoginActivity.class);
+        context.startActivity(intent);
+    }
 
 
     @Override

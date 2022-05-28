@@ -36,16 +36,17 @@ import java.util.List;
 
 import miao.kmirror.dragonli.adapter.MyAdapter;
 import miao.kmirror.dragonli.R;
-import miao.kmirror.dragonli.application.MyApplication;
 import miao.kmirror.dragonli.constant.ConstantValue;
 import miao.kmirror.dragonli.dao.TextInfoDao;
 import miao.kmirror.dragonli.entity.TextInfo;
 import miao.kmirror.dragonli.navFunction.ChangeAppImage;
 import miao.kmirror.dragonli.navFunction.ChangeAppPassword;
 import miao.kmirror.dragonli.utils.ActivityUtils;
+import miao.kmirror.dragonli.utils.DateUtils;
 import miao.kmirror.dragonli.utils.SpfUtils;
 import miao.kmirror.dragonli.utils.ToastUtils;
 import miao.kmirror.dragonli.widget.CustomCenterPopup;
+import miao.kmirror.dragonli.widget.PasswordExpiryPopup;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int MODE_GRID = 1;
     public static final String KEY_LAYOUT_MODE = "key_layout_mode";
     private int currentListLayoutMode = MODE_LINEAR;
+    private int expiryType = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,19 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initData();
         initEvent();
+        passwordExpiryPopup();
+    }
+
+    private void passwordExpiryPopup() {
+        expiryType = DateUtils.passwordExpiry(this);
+        if (expiryType == 0) {
+            {
+                return;
+            }
+        }
+        new XPopup.Builder(this)
+                .asCustom(new PasswordExpiryPopup(this, expiryType))
+                .show();
     }
 
     @Override
@@ -84,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         refreshDataFromDb();
         setListLayout();
-
     }
 
     @Override
@@ -191,19 +205,19 @@ public class MainActivity extends AppCompatActivity {
                         );
                         break;
                     case R.id.nav_set_image_lock_expiry_time:
-                        setConfigValuePopup(
+                        setExpiryTimePopup(
                                 "手势密码提示修改密码时长",
                                 "此设置为多少天后提示您修改您的手势密码，以保证应用安全。\n弹窗提示时间 = 上次密码修改时间 + 您设置的天数",
                                 "当前设置为 " + SpfUtils.getInt(getApplication(), ConstantValue.IMAGE_LOCK_EXPIRY_TIME) + " 天",
-                                ConstantValue.IMAGE_LOCK_EXPIRY_TIME
+                                1
                         );
                         break;
                     case R.id.nav_set_password_expiry_time:
-                        setConfigValuePopup(
+                        setExpiryTimePopup(
                                 "传统输入密码提示修改密码时长",
                                 "此设置为多少天后提示您修改您的传统输入密码，以保证应用安全。\n弹窗提示时间 = 上次密码修改时间 + 您设置的天数",
                                 "当前设置为 " + SpfUtils.getInt(getApplication(), ConstantValue.PASSWORD_EXPIRY_TIME) + " 天",
-                                ConstantValue.PASSWORD_EXPIRY_TIME
+                                0
                         );
                         break;
                     default:
@@ -214,6 +228,42 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    /**
+     * lockType 0 为输入密码， 1 为手势密码
+     */
+    private void setExpiryTimePopup(String title, String desc, String hint, int lockType) {
+        new XPopup.Builder(this)
+                .dismissOnTouchOutside(false)
+                .dismissOnBackPressed(false)
+                .asCustom(new CustomCenterPopup(
+                        this,
+                        title,
+                        desc,
+                        hint,
+                        (etContent) -> {
+                            String tempStr = etContent;
+                            int tempInt;
+                            if (TextUtils.isEmpty(tempStr)) {
+                                tempStr = "0";
+                            }
+                            tempInt = Integer.parseInt(tempStr);
+                            if (tempInt <= 0) {
+                                ToastUtils.toastShort(this, "不能为 0、空或者负数");
+                                return false;
+                            } else {
+                                if (lockType == 0) {
+                                    SpfUtils.updatePasswordExpiryTime(getApplication(), tempInt);
+                                } else {
+                                    SpfUtils.updateImageExpiryTime(getApplication(), tempInt);
+                                }
+                                ToastUtils.toastShort(this, "设置成功");
+                                return true;
+                            }
+                        },
+                        () -> null)).show();
+
     }
 
     private void setConfigValuePopup(String title, String desc, String hint, String key) {
@@ -232,8 +282,8 @@ public class MainActivity extends AppCompatActivity {
                                 tempStr = "0";
                             }
                             tempInt = Integer.parseInt(tempStr);
-                            if (tempInt == 0) {
-                                ToastUtils.toastShort(this, "不能为 0 或空");
+                            if (tempInt <= 0) {
+                                ToastUtils.toastShort(this, "不能为 0、空或者负数");
                                 return false;
                             } else {
                                 SpfUtils.saveInt(this, key, tempInt);

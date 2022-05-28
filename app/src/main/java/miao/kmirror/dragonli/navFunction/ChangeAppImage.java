@@ -3,6 +3,8 @@ package miao.kmirror.dragonli.navFunction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import java.util.TimerTask;
 
 import miao.kmirror.dragonli.R;
 import miao.kmirror.dragonli.activity.MainActivity;
+import miao.kmirror.dragonli.lock.activity.PasswordLoginActivity;
 import miao.kmirror.dragonli.lock.widget.ImageLockView;
 import miao.kmirror.dragonli.singleActivity.SingleImageLockActivity;
 import miao.kmirror.dragonli.utils.ActivityUtils;
@@ -37,6 +40,12 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
      */
     private String imagePassword;
     private boolean isMatch = false;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, ChangeAppImage.class);
+        context.startActivity(intent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +107,7 @@ public class ChangeAppImage extends AppCompatActivity implements ImageLockView.O
                 if (imagePassword.equals(tempPassword)) {
                     SpfUtils.saveString(this, "imagePassword", imagePassword);
                     ToastUtils.toastShort(this, "手势锁修改成功！");
+                    SpfUtils.updateImageExpiryDate(getApplication());
                     ActivityUtils.flagActivityClearTask(this, MainActivity.class);
                 } else {
                     imagePassword = "";

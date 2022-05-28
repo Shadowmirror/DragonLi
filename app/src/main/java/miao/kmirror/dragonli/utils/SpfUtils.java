@@ -52,7 +52,7 @@ public class SpfUtils {
 
     /**
      * 更新锁定应用时的数据
-     * */
+     */
     public static void saveLockData(Context context) {
         int errorLockTime = SpfUtils.getInt(context, ConstantValue.ERROR_LOCK_TIME) * 60 * 1000;
         SpfUtils.saveLong(context, ConstantValue.UNLOCK_DATE, System.currentTimeMillis() + errorLockTime);
@@ -61,7 +61,7 @@ public class SpfUtils {
 
     /**
      * 更新解锁应用时的数据
-     * */
+     */
     public static void saveUnLockData(Context context) {
         SpfUtils.saveLong(context, ConstantValue.UNLOCK_DATE, 0L);
         SpfUtils.saveLong(context, ConstantValue.LAST_ERROR_PASSWORD_DATE, 0L);
@@ -70,8 +70,8 @@ public class SpfUtils {
 
     /**
      * 初始化数据
-     * */
-    public static void saveConfigData(Context context){
+     */
+    public static void saveConfigData(Context context) {
         // 设定离开应用锁定时间
         SpfUtils.saveInt(context, ConstantValue.LEAVE_TIME, ConstantValue.LEAVE_TIME_DEFAULT_VALUE);
         // 设定应用手势/密码解锁错误锁定最大次数
@@ -96,9 +96,41 @@ public class SpfUtils {
 
     /**
      * 更新错误输入次数时的数据
-     * */
-    public static void  updateErrorNumberData(Context context, int errorNumber){
+     */
+    public static void updateErrorNumberData(Context context, int errorNumber) {
         SpfUtils.saveInt(context, ConstantValue.ERROR_LOCK_NUMBER, errorNumber);
         SpfUtils.saveLong(context, ConstantValue.LAST_ERROR_PASSWORD_DATE, System.currentTimeMillis());
+    }
+
+    /**
+     * 更新手势密码提示修改密码时间
+     */
+    public static void updateImageExpiryDate(Context context) {
+        int time = SpfUtils.getInt(context, ConstantValue.IMAGE_LOCK_EXPIRY_TIME);
+        SpfUtils.saveLong(context, ConstantValue.IMAGE_LOCK_EXPIRY_DATE, System.currentTimeMillis() + DateUtils.getDayTimeMillis(time));
+    }
+
+    /**
+     * 更新输入密码提示修改密码时间
+     */
+    public static void updatePasswordExpiryDate(Context context) {
+        int time = SpfUtils.getInt(context, ConstantValue.PASSWORD_EXPIRY_TIME);
+        SpfUtils.saveLong(context, ConstantValue.PASSWORD_EXPIRY_DATE, System.currentTimeMillis() + DateUtils.getDayTimeMillis(time));
+    }
+
+    /**
+     * 更新手势密码提示修改密码时长 单位 天
+     */
+    public static void updateImageExpiryTime(Context context, int day) {
+        SpfUtils.saveInt(context, ConstantValue.IMAGE_LOCK_EXPIRY_TIME, day);
+        SpfUtils.updateImageExpiryDate(context);
+    }
+
+    /**
+     * 更新输入密码提示修改密码时长 单位 天
+     */
+    public static void updatePasswordExpiryTime(Context context, int day) {
+        SpfUtils.saveInt(context, ConstantValue.PASSWORD_EXPIRY_TIME, day);
+        SpfUtils.updatePasswordExpiryDate(context);
     }
 }

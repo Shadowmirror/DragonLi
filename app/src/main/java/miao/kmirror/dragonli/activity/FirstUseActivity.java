@@ -32,8 +32,9 @@ import miao.kmirror.dragonli.utils.ToolbarUtils;
 public class FirstUseActivity extends AppCompatActivity {
 
     private static final String TAG = "FirstUseActivity";
-    private EditText EtPassword;
-    private EditText EtAgainPassword;
+    private EditText etPassword;
+    private EditText etAgainPassword;
+    private Button toSettingImage;
     private AppPackageDao appPackageDao = new AppPackageDao();
     private WebInfoDao webInfoDao = new WebInfoDao();
 
@@ -44,18 +45,27 @@ public class FirstUseActivity extends AppCompatActivity {
         ToolbarUtils.initToolBar(this, false);
         initConfigData();
         initLocalWebAndApp();
-        EtPassword = findViewById(R.id.et_password);
-        EtAgainPassword = findViewById(R.id.et_again_password);
-        Button toSettingImage = findViewById(R.id.to_setting_image);
+        initView();
+        initListener();
+
+    }
+
+    private void initView() {
+        etPassword = findViewById(R.id.et_password);
+        etAgainPassword = findViewById(R.id.et_again_password);
+        toSettingImage = findViewById(R.id.to_setting_image);
+    }
+
+    private void initListener() {
         toSettingImage.setOnClickListener(v -> {
-            String password = EtPassword.getText().toString();
-            String againPassword = EtAgainPassword.getText().toString();
+            String password = etPassword.getText().toString();
+            String againPassword = etAgainPassword.getText().toString();
             if (TextUtils.isEmpty(againPassword)) {
                 ToastUtils.toastShortCenter(this, "密码不能为空！");
             } else if (password.equals(againPassword)) {
                 SpfUtils.saveString(this, PasswordUtils.COMMON_PASSWORD, MD5Utils.getMD5Code(password));
-                Intent intent = new Intent(this, ImageLockActivity.class);
-                startActivity(intent);
+                SpfUtils.updatePasswordExpiryDate(getApplication());
+                ImageLockActivity.startActivity(this);
             } else {
                 ToastUtils.toastShortCenter(this, "两次密码不一致请重新输入！！！");
             }
