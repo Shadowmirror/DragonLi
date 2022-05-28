@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
 }
 apply plugin: 'kotlin-android'
+apply from: "copy_apk.gradle"
 
 android {
     compileSdk 31
@@ -10,18 +11,36 @@ android {
         applicationId "miao.kmirror.dragonli"
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 3000
+        versionName "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+
+        debug {}
+
+        release {
+            storeFile file(readProperties('KEY_PATH'))
+            storePassword readProperties('KEY_PASS')
+            keyAlias readProperties('ALIAS_NAME')
+            keyPassword readProperties('ALIAS_PASS')
+        }
+    }
+
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -52,4 +71,21 @@ dependencies {
     implementation "androidx.core:core-ktx:$kotlin_version"
     //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+def readProperties(key) {
+    File file = rootProject.file('package.properties')
+    if (file.exists()) {
+        InputStream inputStream = rootProject.file('package.properties').newDataInputStream()
+        Properties properties = new Properties()
+        properties.load(inputStream)
+
+        if (properties.containsKey(key)) {
+            return properties.getProperty(key)
+        }
+    }
+}
+
+static def releaseTime() {
+    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
 }

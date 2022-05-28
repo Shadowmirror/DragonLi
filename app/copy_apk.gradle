@@ -1,0 +1,66 @@
+project.archivesBaseName = "DragonLi"
+
+static def releaseTime() {
+    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        if (outputFileName.endsWith('.apk')) {
+            //这里使用之前定义apk文件名称
+
+//            outputFileName = "${project.archivesBaseName}_v${variant.productFlavors[0].versionName}_${variant.productFlavors[0].versionCode}_${variant.productFlavors[0].name}_${releaseTime()}_${variant.buildType.name}.apk"
+            outputFileName = "${project.archivesBaseName}_v${versionName}_${releaseTime()}_${name}.apk"
+        }
+    }
+
+    //复制到根目录下的output文件夹
+    File desFilePath = new File("${rootDir}/app/output")
+    //删除output目录
+    delete desFilePath
+
+    //API 'variant.getAssemble()' is obsolete and has been replaced with 'variant.getAssembleProvider()'.
+    //It will be removed in version 7.0 of the Android Gradle plugin.
+    //编译完成后将apk复制到指定目录
+//    variant.assemble.doLast {
+//        variant.outputs.all {
+//            try {
+//                //判断文件夹是否存在
+//                if (!desFilePath.exists()) {
+//                    desFilePath.mkdir()
+//                }
+//                //将编译好的apk 复制到output目录
+//                copy {
+//                    from outputFile
+//                    into desFilePath
+//                    include '**/*.apk'
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
+    //used variant.getAssembleProvider().
+    //(variant.assembleProvider.configure|variant.assembleProvider.get.doLast)
+    //https://stackoverflow.com/questions/54193510/while-android-studio-updated-to-v3-3-getting-api-variant-getassemble-is-obso
+    variant.assembleProvider.configure {
+        it.doLast {
+            variant.outputs.all {
+                try {
+                    //判断文件夹是否存在
+                    if (!desFilePath.exists()) {
+                        desFilePath.mkdir()
+                    }
+                    //将编译好的apk 复制到output目录
+                    copy {
+                        from outputFile
+                        into desFilePath
+                        include '**/*release*.apk'
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+}
