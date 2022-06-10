@@ -97,7 +97,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume: 重新进入登录页");
-        if (promptInfo != null) {
+        if (!SpfUtils.getString(this, PasswordUtils.COMMON_PASSWORD).equals("")
+                || !SpfUtils.getString(this, PasswordUtils.IMAGE_PASSWORD).equals("")) {
             if (DateUtils.lockExpired(getApplication())) {
                 DateUtils.isLastErrorPasswordExpired(getApplication());
                 prompt.authenticate(promptInfo);
@@ -159,6 +160,4 @@ public class LoginActivity extends AppCompatActivity {
 
         return new BiometricPrompt(this, executor, callback);
     }
-
-
 }
